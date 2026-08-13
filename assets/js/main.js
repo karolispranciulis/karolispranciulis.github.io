@@ -263,81 +263,117 @@
 
     /* =====================================================
        SECTION AUTO SCROLL
+
+       One wheel gesture = one section. A large/fast wheel delta
+       never skips multiple sections, and the lock remains active
+       until the smooth anchor-style movement has finished.
     ===================================================== */
 
     const sections = Array.from(
         document.querySelectorAll("main > section")
     );
 
-    let scrollCooldown = false;
+    let sectionScrollLocked = false;
+    let unlockTimer = null;
 
-    function getCurrentSection() {
+    function getCurrentSectionIndex() {
         if (!sections.length) return 0;
 
-        const position = window.scrollY + window.innerHeight * 0.35;
-        let closest = 0;
+        const center = window.scrollY + window.innerHeight * 0.5;
+        let closestIndex = 0;
         let closestDistance = Infinity;
 
         sections.forEach(function (section, index) {
-            const distance = Math.abs(section.offsetTop - position);
+            const sectionCenter = section.offsetTop + section.offsetHeight * 0.5;
+            const distance = Math.abs(sectionCenter - center);
 
             if (distance < closestDistance) {
                 closestDistance = distance;
-                closest = index;
+                closestIndex = index;
             }
         });
 
-        return closest;
+        return closestIndex;
     }
 
-    window.addEventListener(
-        "wheel",
-        function (event) {
-            if (
-                window.matchMedia("(prefers-reduced-motion: reduce)").matches
-            ) {
-                return;
-            }
+    function unlockSectionScroll() {
+        sectionScrollLocked = false;
+        unlockTimer = null;
+    }
 
-            /* Project carousel owns wheel movement while hovered. */
-            if (
-                carouselReady &&
-                viewport &&
-                viewport.contains(event.target)
-            ) {
-                return;
-            }
+    function scrollToSection(index) {
+        if (!sections.length) return;
 
-            if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
-            if (Math.abs(event.deltaY) < 10) return;
-            if (scrollCooldown) return;
+        const safeIndex = Math.max(
+            0,
+            Math.min(index, sections.length - 1)
+        );
 
-            const current = getCurrentSection();
+        sectionScrollLocked = true;
 
-            let nextIndex =
-                event.deltaY > 0
-                    ? current + 1
-                    : current - 1;
+        sections[safeIndex].scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
 
-            nextIndex = Math.max(
-                0,
-                Math.min(nextIndex, sections.length - 1)
-            );
+        /* Ignore all additional wheel events during the animation. */
+        window.clearTimeout(unlockTimer);
+        unlockTimer = window.setTimeout(
+            unlockSectionScroll,
+            1050
+        );
+    }
 
-            if (nextIndex === current) return;
+    if (sections.length > 1) {
+        window.addEventListener(
+            "wheel",
+            function (event) {
+                if (
+                    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                ) {
+                    return;
+                }
 
-            event.preventDefault();
-            scrollCooldown = true;
+                /* Project carousel keeps ownership of wheel input. */
+                if (
+                    carouselReady &&
+                    viewport &&
+                    viewport.contains(event.target)
+                ) {
+                    return;
+                }
 
-            sections[nextIndex].scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
+                if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+                    return;
+                }
 
-            window.setTimeout(function () {
-                scrollCooldown = false;
-            }, 850);
-        },
-        { passive: false }
-    );
+                /* Ignore tiny trackpad noise. */
+                if (Math.abs(event.deltaY) < 8) {
+                    return;
+                }
+
+                /* A single gesture can only move one section. */
+                if (sectionScrollLocked) {
+                    event.preventDefault();
+                    return;
+                }
+
+                const currentIndex = getCurrentSectionIndex();
+                const direction = event.deltaY > 0 ? 1 : -1;
+                const targetIndex = currentIndex + direction;
+
+                if (
+                    targetIndex < 0 ||
+                    targetIndex >= sections.length
+                ) {
+                    return;
+                }
+
+                event.preventDefault();
+                scrollToSection(targetIndex);
+            },
+            { passive: false }
+        );
+    }
+
 })();

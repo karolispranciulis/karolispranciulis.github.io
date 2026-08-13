@@ -6,5 +6,5 @@ description: >
   
 project: Minecraft Plugin Development (Kotlin)
 
-files_folder: /plugins/MsgPlugin/files/
+files_folder: plugins/MsgPlugin/files/
 ---

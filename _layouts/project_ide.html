@@ -507,7 +507,7 @@
             <div class="file-list">
 
 
-                {% assign plugin_folder = page.files_folder %}
+                {% assign plugin_folder = page.files_folder | remove_first: "/" %}
 
                 {% assign plugin_files = site.static_files
                     | where_exp: "file", "file.path contains plugin_folder"

@@ -1,683 +1,343 @@
 (function () {
+    "use strict";
 
     /* =====================================================
        NAVIGATION
     ===================================================== */
 
-    const navLinks =
-        document.querySelectorAll(".nav-links a");
-
-
-    navLinks.forEach(function (link) {
-
+    document.querySelectorAll(".nav-links a").forEach(function (link) {
         link.addEventListener("click", function () {
-
-            document
-                .querySelector(".nav-links")
-                ?.classList.remove("open");
-
+            document.querySelector(".nav-links")?.classList.remove("open");
         });
-
     });
-
 
 
     /* =====================================================
        PROJECT CAROUSEL
     ===================================================== */
 
-    const viewport =
-        document.getElementById("projects-viewport");
+    const viewport = document.getElementById("projects-viewport");
+    const track = document.getElementById("projects-track");
+    const previousButton = document.querySelector(".carousel-prev");
+    const nextButton = document.querySelector(".carousel-next");
+    const dotsContainer = document.getElementById("carousel-dots");
+    const projectsSection = document.getElementById("projects");
 
-    const track =
-        document.getElementById("projects-track");
-
-    const previousButton =
-        document.querySelector(".carousel-prev");
-
-    const nextButton =
-        document.querySelector(".carousel-next");
-
-    const dotsContainer =
-        document.getElementById("carousel-dots");
-
-
-    if (
-        !viewport ||
-        !track ||
-        !previousButton ||
-        !nextButton
-    ) {
-        return;
-    }
-
-
-    let originalItems =
-        Array.from(
-            track.querySelectorAll(".project-item")
-        );
-
-
+    let carouselReady = false;
+    let originalItems = [];
     let currentIndex = 0;
-
-    let autoPlay;
-
-
-    /*
-     * Number of cards visible.
-     */
+    let autoPlay = null;
 
     function getVisibleCount() {
-
-        return window.innerWidth <= 900
-            ? 1
-            : 2;
-
+        return window.innerWidth <= 900 ? 1 : 2;
     }
-
-
-    /*
-     * Don't create an unnecessarily complicated
-     * infinite carousel if there is only one project.
-     */
-
-    if (originalItems.length <= 1) {
-
-        previousButton.style.display = "none";
-
-        nextButton.style.display = "none";
-
-        if (dotsContainer) {
-            dotsContainer.style.display = "none";
-        }
-
-        return;
-
-    }
-
-
-    /*
-     * Clone cards at both ends.
-     *
-     * This allows:
-     *
-     * A B C D
-     *
-     * to behave like:
-     *
-     * C D | A B C D | A B
-     */
-
-    function createLoop() {
-
-        const visible =
-            getVisibleCount();
-
-
-        track.innerHTML = "";
-
-
-        const before =
-            originalItems
-                .slice(-visible)
-                .map(function (item) {
-                    return item.cloneNode(true);
-                });
-
-
-        const after =
-            originalItems
-                .slice(0, visible)
-                .map(function (item) {
-                    return item.cloneNode(true);
-                });
-
-
-        before.forEach(function (item) {
-            track.appendChild(item);
-        });
-
-
-        originalItems.forEach(function (item) {
-            track.appendChild(
-                item.cloneNode(true)
-            );
-        });
-
-
-        after.forEach(function (item) {
-            track.appendChild(item);
-        });
-
-
-        currentIndex = visible;
-
-
-        updatePosition(false);
-
-        createDots();
-
-    }
-
-
-    /*
-     * Move the track.
-     */
 
     function updatePosition(animate) {
+        if (!track || !track.children.length) return;
 
-        const firstCard =
-            track.querySelector(".project-item");
+        const firstCard = track.querySelector(".project-item");
+        if (!firstCard) return;
 
+        const cardWidth = firstCard.getBoundingClientRect().width;
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
 
-        if (!firstCard) {
-            return;
-        }
-
-
-        const cardWidth =
-            firstCard.getBoundingClientRect().width;
-
-
-        const gap =
-            parseFloat(
-                getComputedStyle(track).gap
-            ) || 0;
-
-
-        if (!animate) {
-
-            track.style.transition = "none";
-
-        } else {
-
-            track.style.transition =
-                "transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1)";
-
-        }
-
+        track.style.transition = animate
+            ? "transform .55s cubic-bezier(.22,.61,.36,1)"
+            : "none";
 
         track.style.transform =
-            "translateX(-" +
-            (
-                currentIndex *
-                (cardWidth + gap)
-            ) +
-            "px)";
-
+            "translateX(-" + currentIndex * (cardWidth + gap) + "px)";
 
         if (!animate) {
-
             requestAnimationFrame(function () {
-
                 track.style.transition =
-                    "transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1)";
-
+                    "transform .55s cubic-bezier(.22,.61,.36,1)";
             });
-
         }
-
 
         updateDots();
-
     }
 
+    function updateDots() {
+        if (!dotsContainer || !originalItems.length) return;
 
-    /*
-     * Move forward.
-     */
+        const visible = getVisibleCount();
+        let realIndex = currentIndex - visible;
 
-    function next() {
+        realIndex =
+            (realIndex % originalItems.length + originalItems.length) %
+            originalItems.length;
 
-        currentIndex++;
-
-        updatePosition(true);
-
+        dotsContainer.querySelectorAll(".carousel-dot").forEach(function (dot, index) {
+            dot.classList.toggle("active", index === realIndex);
+        });
     }
-
-
-    /*
-     * Move backwards.
-     */
-
-    function previous() {
-
-        currentIndex--;
-
-        updatePosition(true);
-
-    }
-
-
-    /*
-     * When reaching a cloned card,
-     * silently jump back into the real list.
-     */
-
-    track.addEventListener(
-        "transitionend",
-        function () {
-
-            const visible =
-                getVisibleCount();
-
-
-            const total =
-                originalItems.length;
-
-
-            if (
-                currentIndex >=
-                total + visible
-            ) {
-
-                currentIndex =
-                    visible;
-
-                updatePosition(false);
-
-            }
-
-
-            if (
-                currentIndex < visible
-            ) {
-
-                currentIndex =
-                    total + visible - 1;
-
-                updatePosition(false);
-
-            }
-
-        }
-    );
-
-
-    /*
-     * Buttons.
-     */
-
-    nextButton.addEventListener(
-        "click",
-        function () {
-
-            next();
-
-            restartAutoPlay();
-
-        }
-    );
-
-
-    previousButton.addEventListener(
-        "click",
-        function () {
-
-            previous();
-
-            restartAutoPlay();
-
-        }
-    );
-
-
-
-    /* =====================================================
-       DOTS
-    ===================================================== */
 
     function createDots() {
-
-        if (!dotsContainer) {
-            return;
-        }
-
+        if (!dotsContainer) return;
 
         dotsContainer.innerHTML = "";
 
+        originalItems.forEach(function (_, index) {
+            const dot = document.createElement("button");
+            dot.type = "button";
+            dot.className = "carousel-dot";
+            dot.setAttribute("aria-label", "Go to project " + (index + 1));
 
-        originalItems.forEach(
-            function (_, index) {
+            dot.addEventListener("click", function () {
+                currentIndex = getVisibleCount() + index;
+                updatePosition(true);
+                restartAutoPlay();
+            });
 
-                const dot =
-                    document.createElement("button");
-
-
-                dot.type = "button";
-
-
-                dot.className =
-                    "carousel-dot";
-
-
-                dot.setAttribute(
-                    "aria-label",
-                    "Go to project " +
-                    (index + 1)
-                );
-
-
-                dot.addEventListener(
-                    "click",
-                    function () {
-
-                        const visible =
-                            getVisibleCount();
-
-
-                        currentIndex =
-                            visible + index;
-
-
-                        updatePosition(true);
-
-                        restartAutoPlay();
-
-                    }
-                );
-
-
-                dotsContainer.appendChild(dot);
-
-            }
-        );
-
+            dotsContainer.appendChild(dot);
+        });
     }
 
+    function createLoop() {
+        if (!track) return;
 
-    function updateDots() {
+        const visible = getVisibleCount();
+        track.innerHTML = "";
 
-        if (!dotsContainer) {
-            return;
-        }
+        originalItems.slice(-visible).forEach(function (item) {
+            track.appendChild(item.cloneNode(true));
+        });
 
+        originalItems.forEach(function (item) {
+            track.appendChild(item.cloneNode(true));
+        });
 
-        const dots =
-            dotsContainer.querySelectorAll(
-                ".carousel-dot"
-            );
+        originalItems.slice(0, visible).forEach(function (item) {
+            track.appendChild(item.cloneNode(true));
+        });
 
-
-        const visible =
-            getVisibleCount();
-
-
-        let realIndex =
-            currentIndex - visible;
-
-
-        realIndex =
-            (
-                realIndex %
-                originalItems.length +
-                originalItems.length
-            ) %
-            originalItems.length;
-
-
-        dots.forEach(
-            function (dot, index) {
-
-                dot.classList.toggle(
-                    "active",
-                    index === realIndex
-                );
-
-            }
-        );
-
+        currentIndex = visible;
+        updatePosition(false);
+        createDots();
     }
 
+    function nextProject() {
+        if (!carouselReady) return;
+        currentIndex++;
+        updatePosition(true);
+    }
 
-
-    /* =====================================================
-       AUTO LOOP
-    ===================================================== */
+    function previousProject() {
+        if (!carouselReady) return;
+        currentIndex--;
+        updatePosition(true);
+    }
 
     function startAutoPlay() {
-
+        if (!carouselReady) return;
         clearInterval(autoPlay);
-
-
-        autoPlay =
-            setInterval(
-                function () {
-
-                    next();
-
-                },
-                4500
-            );
-
+        autoPlay = setInterval(nextProject, 5000);
     }
-
 
     function restartAutoPlay() {
-
         startAutoPlay();
-
     }
 
+    if (viewport && track) {
+        originalItems = Array.from(track.querySelectorAll(".project-item"));
 
-    /*
-     * Don't auto-move while the mouse is
-     * over the carousel.
-     */
+        if (originalItems.length > 1) {
+            carouselReady = true;
 
-    viewport.addEventListener(
-        "mouseenter",
-        function () {
-
-            clearInterval(autoPlay);
-
-        }
-    );
-
-
-    viewport.addEventListener(
-        "mouseleave",
-        function () {
-
+            createLoop();
             startAutoPlay();
 
-        }
-    );
+            nextButton?.addEventListener("click", function () {
+                nextProject();
+                restartAutoPlay();
+            });
 
+            previousButton?.addEventListener("click", function () {
+                previousProject();
+                restartAutoPlay();
+            });
+
+            viewport.addEventListener("mouseenter", function () {
+                clearInterval(autoPlay);
+            });
+
+            viewport.addEventListener("mouseleave", function () {
+                startAutoPlay();
+            });
+
+            track.addEventListener("transitionend", function () {
+                const visible = getVisibleCount();
+                const total = originalItems.length;
+
+                if (currentIndex >= total + visible) {
+                    currentIndex = visible;
+                    updatePosition(false);
+                } else if (currentIndex < visible) {
+                    currentIndex = total + visible - 1;
+                    updatePosition(false);
+                }
+            });
+
+            let resizeTimer;
+
+            window.addEventListener("resize", function () {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(createLoop, 150);
+            });
+
+            /* Mouse-wheel / trackpad over projects moves the carousel. */
+            viewport.addEventListener(
+                "wheel",
+                function (event) {
+                    if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+                    if (Math.abs(event.deltaY) < 10) return;
+
+                    event.preventDefault();
+
+                    if (event.deltaY > 0) {
+                        nextProject();
+                    } else {
+                        previousProject();
+                    }
+
+                    restartAutoPlay();
+                },
+                { passive: false }
+            );
+
+            /* Touch swipe on mobile. */
+            let touchStartX = 0;
+
+            viewport.addEventListener("touchstart", function (event) {
+                touchStartX = event.touches[0].clientX;
+            }, { passive: true });
+
+            viewport.addEventListener("touchend", function (event) {
+                const touchEndX = event.changedTouches[0].clientX;
+                const distance = touchEndX - touchStartX;
+
+                if (Math.abs(distance) < 45) return;
+
+                if (distance < 0) {
+                    nextProject();
+                } else {
+                    previousProject();
+                }
+
+                restartAutoPlay();
+            }, { passive: true });
+        } else {
+            /* There is currently one project. Keep the layout ready for more. */
+            if (previousButton) previousButton.disabled = true;
+            if (nextButton) nextButton.disabled = true;
+            if (dotsContainer) dotsContainer.style.display = "none";
+        }
+    }
 
 
     /* =====================================================
-       RESIZE
+       PROJECT SECTION REVEAL
     ===================================================== */
 
-    let resizeTimer;
+    if (projectsSection) {
+        const observer = new IntersectionObserver(
+            function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
 
+                    const wrap = entry.target.querySelector(".projects-carousel-wrap");
+                    if (!wrap) return;
 
-    window.addEventListener(
-        "resize",
-        function () {
+                    wrap.classList.remove("is-revealing");
+                    void wrap.offsetWidth;
+                    wrap.classList.add("is-revealing");
+                });
+            },
+            { threshold: 0.25 }
+        );
 
-            clearTimeout(resizeTimer);
-
-
-            resizeTimer =
-                setTimeout(
-                    function () {
-
-                        createLoop();
-
-                    },
-                    150
-                );
-
-        }
-    );
-
-
-    createLoop();
-
-    startAutoPlay();
-
+        observer.observe(projectsSection);
+    }
 
 
     /* =====================================================
        SECTION AUTO SCROLL
     ===================================================== */
 
-    const sections =
-        Array.from(
-            document.querySelectorAll(
-                "main > section"
-            )
-        );
+    const sections = Array.from(
+        document.querySelectorAll("main > section")
+    );
 
-
-    let isScrolling =
-        false;
-
-
-    let scrollCooldown =
-        false;
-
+    let scrollCooldown = false;
 
     function getCurrentSection() {
+        if (!sections.length) return 0;
 
-        const position =
-            window.scrollY +
-            window.innerHeight * 0.35;
+        const position = window.scrollY + window.innerHeight * 0.35;
+        let closest = 0;
+        let closestDistance = Infinity;
 
+        sections.forEach(function (section, index) {
+            const distance = Math.abs(section.offsetTop - position);
 
-        let closest =
-            0;
-
-
-        let closestDistance =
-            Infinity;
-
-
-        sections.forEach(
-            function (section, index) {
-
-                const distance =
-                    Math.abs(
-                        section.offsetTop -
-                        position
-                    );
-
-
-                if (
-                    distance <
-                    closestDistance
-                ) {
-
-                    closestDistance =
-                        distance;
-
-                    closest =
-                        index;
-
-                }
-
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closest = index;
             }
-        );
-
+        });
 
         return closest;
-
     }
-
 
     window.addEventListener(
         "wheel",
         function (event) {
-
-            /*
-             * Don't hijack tiny horizontal
-             * carousel interactions.
-             */
-
             if (
-                Math.abs(event.deltaX) >
-                Math.abs(event.deltaY)
+                window.matchMedia("(prefers-reduced-motion: reduce)").matches
             ) {
                 return;
             }
 
-
-            if (scrollCooldown) {
+            /* Project carousel owns wheel movement while hovered. */
+            if (
+                carouselReady &&
+                viewport &&
+                viewport.contains(event.target)
+            ) {
                 return;
             }
 
+            if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+            if (Math.abs(event.deltaY) < 10) return;
+            if (scrollCooldown) return;
 
-            const current =
-                getCurrentSection();
-
+            const current = getCurrentSection();
 
             let nextIndex =
-                current;
+                event.deltaY > 0
+                    ? current + 1
+                    : current - 1;
 
+            nextIndex = Math.max(
+                0,
+                Math.min(nextIndex, sections.length - 1)
+            );
 
-            if (event.deltaY > 0) {
-
-                nextIndex =
-                    Math.min(
-                        current + 1,
-                        sections.length - 1
-                    );
-
-            } else {
-
-                nextIndex =
-                    Math.max(
-                        current - 1,
-                        0
-                    );
-
-            }
-
-
-            if (
-                nextIndex === current
-            ) {
-                return;
-            }
-
+            if (nextIndex === current) return;
 
             event.preventDefault();
-
-
-            scrollCooldown =
-                true;
-
-
-            isScrolling =
-                true;
-
+            scrollCooldown = true;
 
             sections[nextIndex].scrollIntoView({
                 behavior: "smooth",
                 block: "start"
             });
 
-
-            setTimeout(
-                function () {
-
-                    scrollCooldown =
-                        false;
-
-                    isScrolling =
-                        false;
-
-                },
-                750
-            );
-
+            window.setTimeout(function () {
+                scrollCooldown = false;
+            }, 850);
         },
-        {
-            passive: false
-        }
+        { passive: false }
     );
-
-
 })();

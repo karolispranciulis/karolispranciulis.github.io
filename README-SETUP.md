@@ -8,7 +8,7 @@ Contact, Contact section with GitHub + Gmail. So none of that needed
 touching.
 
 This package replaces/adds the pieces that actually needed work: theme,
-scroll behaviour, the project carousel, and the code viewer. 
+scroll behaviour, the project carousel, and the code viewer.
 
 ## 1. Copy these files into your repo (overwrite where they already exist)
 
@@ -36,8 +36,8 @@ assets/img/projects/minecraft-plugin.png
 
 - **Theme** — pure black / blue / white (`#05070a` background, `#3fa9ff`
   accent, white text). No yellow anywhere, including default focus outlines.
-- **The `{}` you were seeing** — that's Liquid (`{% %}` / `{{ }}`) not being
-  processed, which happens if you open `index.html` as a local file instead
+- **The `{}` you were seeing** — that's Liquid template syntax (curly-brace
+  tags) not being processed, which happens if you open `index.html` as a local file instead
   of viewing the *built* site. It won't happen on the live GitHub Pages URL
   as long as the Pages build succeeds (check the **Actions** tab on GitHub —
   if a build fails, Pages serves the old build, so also double check that).

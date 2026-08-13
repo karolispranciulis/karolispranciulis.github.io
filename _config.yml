@@ -8,7 +8,7 @@ theme: null
 collections:
   skills:
     output: false
-  projects:
+  projects: 
     output: true
     permalink: /projects/:path/
 

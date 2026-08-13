@@ -1,31 +1,27 @@
 ---
 layout: default
-title: Plugins
+title: Projects
 permalink: /projects/
 ---
 
 <main class="page">
   <div class="page-heading">
-    <div class="eyebrow">PLUGIN LIBRARY</div>
-    <h1>Plugins</h1>
-    <p>Open a plugin to browse its source files in the built-in IDE.</p>
+    <div class="eyebrow">SELECTED WORK</div>
+    <h1>Projects</h1>
+    <p>Explore my projects and open a project to see the plugins and source files inside it.</p>
   </div>
 
-  <section class="project-grid">
+  <section class="project-list">
     {% for project in site.projects %}
-    <a class="project-card" href="{{ project.url | relative_url }}">
+    <a class="project-card project-card-large" href="{{ project.url | relative_url }}">
       <div class="project-card-top">
-        <span class="project-icon">⌘</span>
+        <img src="{{ project.icon | relative_url }}" alt="{{ project.title }}">
         <span class="project-arrow">↗</span>
       </div>
-      <div class="project-type">PLUGIN</div>
+      <div class="project-type">PROJECT</div>
       <h2>{{ project.title }}</h2>
       <p>{{ project.short_description }}</p>
-      {% if project.tags %}
-      <div class="project-tags">
-        {% for tag in project.tags %}<span>{{ tag }}</span>{% endfor %}
-      </div>
-      {% endif %}
+      <div class="project-card-link">View project</div>
     </a>
     {% endfor %}
   </section>

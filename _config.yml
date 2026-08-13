@@ -6,3 +6,5 @@ include: [".well-known"]
 collections:
   projects:
     output: true
+  plugins:
+    output: true

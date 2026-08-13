@@ -1,8 +1,8 @@
 ---
 layout: project_ide
-title: Minecraft Plugin Development
-short_description: Custom Minecraft plugin built in Kotlin.
-icon: /assets/projects/minecraft-plugin-development-kotlin.png
+title: Example Minecraft Plugin
+description: A small Kotlin and Paper plugin demonstrating the project IDE.
+project: Minecraft Plugin Development (Kotlin)
 tags:
   - Kotlin
   - Paper
@@ -10,7 +10,7 @@ tags:
 files:
   - name: Main.kt
     content: |
-      package dev.xao3.plugin
+      package dev.karolis.example
 
       import org.bukkit.plugin.java.JavaPlugin
 
@@ -28,6 +28,6 @@ files:
     content: |
       name: ExamplePlugin
       version: 1.0
-      main: dev.xao3.plugin.Main
+      main: dev.karolis.example.Main
       api-version: '1.21'
 ---

@@ -11,23 +11,33 @@ layout: null
 </head>
 <body>
   {% include navigation.html %}
+
   <main id="site-root">
-    <section id="home" class="panel">
-      <div class="panel-inner">
+    <section id="home" class="panel hero-panel">
+      <div class="panel-inner hero-content">
+        <div class="eyebrow">PROGRAMMER · KOTLIN · MINECRAFT</div>
         <h1 class="home-title">Karolis Pranciulis</h1>
-        <p class="lead">I am a programmer. My current project is Minecraft plugin development (Kotlin).</p>
+        <p class="lead">I build software, experiment with ideas, and enjoy turning technical problems into practical projects. I am especially interested in Kotlin, Minecraft plugin development, and learning how things work under the hood.</p>
+        <div class="hero-actions">
+          <a class="primary-button" href="#projects">View projects</a>
+          <a class="secondary-button" href="#contact">Get in touch</a>
+        </div>
       </div>
     </section>
 
     <section id="skills" class="panel">
       <div class="panel-inner">
+        <div class="eyebrow">WHAT I USE</div>
         <h2>Skills</h2>
+        <p class="section-intro">Technologies I use to build, learn, and experiment with software.</p>
         <div class="widget-grid">
           {% for skill in site.data.skills %}
-          <div class="widget">
+          <div class="widget skill-widget">
             <img src="{{ skill.image | relative_url }}" alt="{{ skill.name }}">
-            <h3>{{ skill.name }}</h3>
-            <p>{{ skill.description }}</p>
+            <div>
+              <h3>{{ skill.name }}</h3>
+              <p>{{ skill.description }}</p>
+            </div>
           </div>
           {% endfor %}
         </div>
@@ -36,13 +46,19 @@ layout: null
 
     <section id="projects" class="panel">
       <div class="panel-inner">
-        <h2>Plugins</h2>
-        <div class="widget-grid carousel" id="projects-carousel">
+        <div class="eyebrow">SELECTED WORK</div>
+        <h2>Projects</h2>
+        <p class="section-intro">A look at the projects I am building and the code behind them.</p>
+        <div class="widget-grid">
           {% for project in site.projects %}
-          <a href="{{ project.url | relative_url }}" class="widget project-item">
+          <a href="{{ project.url | relative_url }}" class="widget project-widget">
             <img src="{{ project.icon | relative_url }}" alt="{{ project.title }}">
-            <h3>{{ project.title }}</h3>
-            <p>{{ project.short_description }}</p>
+            <div class="project-copy">
+              <div class="project-type">PROJECT</div>
+              <h3>{{ project.title }}</h3>
+              <p>{{ project.short_description }}</p>
+            </div>
+            <span class="widget-arrow">↗</span>
           </a>
           {% endfor %}
         </div>
@@ -50,19 +66,29 @@ layout: null
     </section>
 
     <section id="about" class="panel">
-      <div class="panel-inner">
+      <div class="panel-inner narrow-panel">
+        <div class="eyebrow">A LITTLE ABOUT ME</div>
         <h2>About</h2>
-        <p>I'm 17 and I live in Kaunas, Lithuania.</p>
-        <p>My hobbies are music and programming. I'm a programmer — Minecraft plugin development is one of my current projects.</p>
+        <p>I'm 17 and I live in Kaunas, Lithuania. I enjoy programming, music, and spending time exploring technology.</p>
+        <p>I love computers — not just using them, but understanding how software works, trying new technologies, and building things from scratch.</p>
+        <p>Programming gives me a way to turn ideas into something real. I am always looking for a new concept to learn, a problem to solve, or a project that can teach me something useful.</p>
       </div>
     </section>
 
     <section id="contact" class="panel">
-      <div class="panel-inner">
+      <div class="panel-inner narrow-panel">
+        <div class="eyebrow">LET'S CONNECT</div>
         <h2>Contact</h2>
+        <p>If you want to talk about programming, a project, or just technology in general, feel free to reach out.</p>
         <div class="contact-icons">
-          <a class="contact-button" href="https://github.com/karolispranciulis" target="_blank" rel="noopener">GitHub</a>
-          <a class="contact-button" href="mailto:pranciuliskarolis@gmail.com">pranciuliskarolis@gmail.com</a>
+          <a class="contact-button" href="https://github.com/karolispranciulis" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .6a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.4-1.34-1.77-1.34-1.77-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.77.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.29-1.23 3.29-1.23.65 1.65.24 2.87.12 3.17.77.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .6Z"/></svg>
+            <span>GitHub</span>
+          </a>
+          <a class="contact-button" href="mailto:pranciuliskarolis@gmail.com" aria-label="Email Karolis Pranciulis">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 5.5A2.5 2.5 0 0 1 5 3h14a2.5 2.5 0 0 1 2.5 2.5v13A2.5 2.5 0 0 1 19 21H5a2.5 2.5 0 0 1-2.5-2.5v-13Zm2.7-.5 6.8 5.2L18.8 5H5.2Zm14.3 2.4-6.58 5.03a1.5 1.5 0 0 1-1.84 0L4.5 7.4v10.6c0 .28.22.5.5.5h14c.28 0 .5-.22.5-.5V7.4Z"/></svg>
+            <span>Gmail</span>
+          </a>
         </div>
       </div>
     </section>

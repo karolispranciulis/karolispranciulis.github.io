@@ -1,12 +1,14 @@
-title: "Karolis Pranciulis"
-description: "Karolis Pranciulis — learning Kotlin and Minecraft plugin development."
+title: "xao3"
+description: "xao3 — Minecraft plugin developer working with Kotlin and Paper."
 url: "https://karolispranciulis.github.io"
 
 markdown: kramdown
 theme: null
 
 collections:
-  plugins:
+  skills:
+    output: false
+  projects:
     output: true
     permalink: /projects/:path/
 

@@ -1,4 +1,4 @@
 - name: Kotlin
   image: /assets/skills/kotlin.png
-  description: Mastered for software and Minecraft plugin development.
-  #(To add a new skill later, just add another block here and drop the PNG in your assets folder)
+  description: Primary language for JVM applications and plugin development. Used for software and Minecraft plugin projects.
+# To add a new skill later: add another block here and drop the PNG into /assets/skills/ (keep the image path)

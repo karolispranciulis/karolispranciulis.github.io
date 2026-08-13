@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if page.title and page.title != "Home" %}{{ page.title }} — xao3{% else %}xao3{% endif %}</title>
+  <meta name="description" content="{{ site.description }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+<header class="navbar">
+  <a class="home-mark" href="{{ '/' | relative_url }}" aria-label="Home">xao3</a>
+  <nav class="nav-links" aria-label="Primary navigation">
+    <a href="{{ '/' | relative_url }}#contact">Contact</a>
+    <a href="{{ '/' | relative_url }}#about">About</a>
+    <a href="{{ '/' | relative_url }}#projects">Projects</a>
+    <a href="{{ '/' | relative_url }}#skills">Skills</a>
+  </nav>
+</header>
+{{ content }}
+</body>
+</html>

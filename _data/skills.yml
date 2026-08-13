@@ -1,4 +1,4 @@
 - name: Kotlin
   image: /assets/images/kotlin.png
   description: Mastered for software and Minecraft plugin development.
-  //(To add a new skill later, just add another block here and drop the PNG in your assets folder)
+  #(To add a new skill later, just add another block here and drop the PNG in your assets folder)

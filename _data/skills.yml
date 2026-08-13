@@ -1,0 +1,4 @@
+- name: Kotlin
+  image: /assets/skills/kotlin.png
+  description: Primary language for JVM applications and plugin development. Used for software and Minecraft plugin projects.
+# To add a new skill later: add another block here and drop the PNG into /assets/skills/ (keep the image path)

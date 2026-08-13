@@ -1,19 +1,8 @@
-title: "xao3"
-description: "xao3 — Minecraft plugin developer working with Kotlin and Paper."
-url: "https://karolispranciulis.github.io"
+title: Karolis Pranciulis
+email: pranciuliskarolis@gmail.com
+github_username: karolispranciulis
+include: [".well-known"]
 
-markdown: kramdown
-theme: null
-#aaa
 collections:
-  skills:
-    output: false
-  projects: 
+  projects:
     output: true
-    permalink: /projects/:path/
-
-defaults:
-  - scope:
-      path: ""
-    values:
-      layout: default

@@ -4,82 +4,69 @@ layout: null
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karolis Pranciulis | Programmer</title>
-    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karolis Pranciulis | Programmer</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body>
+  {% include navigation.html %}
+  <main id="site-root">
+    <section id="home" class="panel">
+      <div class="panel-inner">
+        <h1 class="home-title">Karolis Pranciulis</h1>
+        <p class="lead">I am a programmer. My current project is Minecraft plugin development (Kotlin).</p>
+      </div>
+    </section>
 
-    <nav class="navbar">
-        <a href="#home" class="home-btn">xao3</a>
-        <div class="nav-links">
-            <a href="#skills">Skills</a>
-            <a href="#projects">Projects</a>
-            <a href="#about">About</a>
-            <a href="#contact">Contact</a>
+    <section id="skills" class="panel">
+      <div class="panel-inner">
+        <h2>Skills</h2>
+        <div class="widget-grid">
+          {% for skill in site.data.skills %}
+          <div class="widget">
+            <img src="{{ skill.image | relative_url }}" alt="{{ skill.name }}">
+            <h3>{{ skill.name }}</h3>
+            <p>{{ skill.description }}</p>
+          </div>
+          {% endfor %}
         </div>
-    </nav>
+      </div>
+    </section>
 
-    <main id="site-root">
+    <section id="projects" class="panel">
+      <div class="panel-inner">
+        <h2>Plugins</h2>
+        <div class="widget-grid carousel" id="projects-carousel">
+          {% for project in site.projects %}
+          <a href="{{ project.url | relative_url }}" class="widget project-item">
+            <img src="{{ project.icon | relative_url }}" alt="{{ project.title }}">
+            <h3>{{ project.title }}</h3>
+            <p>{{ project.short_description }}</p>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
 
-      <section id="home" class="panel">
-          <div class="panel-inner">
-            <h1 class="home-title">Karolis Pranciulis</h1>
-            <p class="lead">I am a programmer. My current project is Minecraft plugin development (Kotlin).</p>
-          </div>
-      </section>
+    <section id="about" class="panel">
+      <div class="panel-inner">
+        <h2>About</h2>
+        <p>I'm 17 and I live in Kaunas, Lithuania.</p>
+        <p>My hobbies are music and programming. I'm a programmer — Minecraft plugin development is one of my current projects.</p>
+      </div>
+    </section>
 
-      <section id="skills" class="panel">
-          <div class="panel-inner">
-            <h2>Skills</h2>
-            <div class="widget-grid" id="skills-grid">
-                {% for skill in site.data.skills %}
-                <div class="widget">
-                    <img src="{{ skill.image | relative_url }}" alt="{{ skill.name }}">
-                    <h3>{{ skill.name }}</h3>
-                    <p>{{ skill.description }}</p>
-                </div>
-                {% endfor %}
-            </div>
-          </div>
-      </section>
-
-      <section id="projects" class="panel">
-          <div class="panel-inner">
-            <h2>Projects</h2>
-            <div class="widget-grid carousel" id="projects-carousel">
-                {% for project in site.projects %}
-                <a href="{{ project.url | relative_url }}" class="widget project-item" target="_blank" rel="noopener">
-                    <img src="{{ project.icon | relative_url }}" alt="Project Icon">
-                    <h3>{{ project.title }}</h3>
-                    <p>{{ project.short_description }}</p>
-                </a>
-                {% endfor %}
-            </div>
-          </div>
-      </section>
-
-      <section id="about" class="panel">
-          <div class="panel-inner">
-            <h2>About</h2>
-            <p>I'm 17 and I live in Kaunas, Lithuania.</p>
-            <p>My hobbies are music and programming. I'm a programmer — Minecraft plugin development is one of my current projects.</p>
-          </div>
-      </section>
-
-      <section id="contact" class="panel">
-          <div class="panel-inner">
-            <h2>Contact</h2>
-            <div class="contact-icons">
-                <a class="contact-button" href="https://github.com/karolispranciulis" target="_blank" rel="noopener">GitHub</a>
-                <a class="contact-button" href="mailto:pranciuliskarolis@gmail.com">pranciuliskarolis@gmail.com</a>
-            </div>
-          </div>
-      </section>
-
-    </main>
-
-    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+    <section id="contact" class="panel">
+      <div class="panel-inner">
+        <h2>Contact</h2>
+        <div class="contact-icons">
+          <a class="contact-button" href="https://github.com/karolispranciulis" target="_blank" rel="noopener">GitHub</a>
+          <a class="contact-button" href="mailto:pranciuliskarolis@gmail.com">pranciuliskarolis@gmail.com</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
 </body>
 </html>

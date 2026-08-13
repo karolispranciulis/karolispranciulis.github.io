@@ -1,52 +1,32 @@
 ---
 layout: default
-title: Projects
+title: Plugins
 permalink: /projects/
 ---
 
-<div class="page-heading">
-    <div class="eyebrow">
-        PORTFOLIO
-    </div>
+<main class="page">
+  <div class="page-heading">
+    <div class="eyebrow">PLUGIN LIBRARY</div>
+    <h1>Plugins</h1>
+    <p>Open a plugin to browse its source files in the built-in IDE.</p>
+  </div>
 
-    <h1>Projects</h1>
-
-    <p>
-        Things I'm building while learning programming.
-    </p>
-</div>
-
-<section class="project-grid">
-
-    <a
-        class="project-card"
-        href="{{ '/projects/minecraft-plugin-development-kotlin/' | relative_url }}"
-    >
-
-        <div class="project-card-top">
-            <span class="project-icon">⌘</span>
-            <span class="project-arrow">↗</span>
-        </div>
-
-        <div class="project-type">
-            DEVELOPMENT
-        </div>
-
-        <h2>
-            Minecraft Plugin Development (Kotlin)
-        </h2>
-
-        <p>
-            Learning to program Minecraft plugins in Kotlin
-            using Paper.
-        </p>
-
-        <div class="project-tags">
-            <span>Kotlin</span>
-            <span>Paper</span>
-            <span>Minecraft</span>
-        </div>
-
+  <section class="project-grid">
+    {% for project in site.projects %}
+    <a class="project-card" href="{{ project.url | relative_url }}">
+      <div class="project-card-top">
+        <span class="project-icon">⌘</span>
+        <span class="project-arrow">↗</span>
+      </div>
+      <div class="project-type">PLUGIN</div>
+      <h2>{{ project.title }}</h2>
+      <p>{{ project.short_description }}</p>
+      {% if project.tags %}
+      <div class="project-tags">
+        {% for tag in project.tags %}<span>{{ tag }}</span>{% endfor %}
+      </div>
+      {% endif %}
     </a>
-
-</section>
+    {% endfor %}
+  </section>
+</main>

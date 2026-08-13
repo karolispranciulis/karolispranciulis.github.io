@@ -29,6 +29,15 @@ permalink: /projects/
         href="{{ '/projects/minecraft-plugin-development-kotlin/' | relative_url }}"
     >
 
+        <div class="project-card-top">
+
+            <span class="project-icon">
+                ⌘
+            </span>
+
+        </div>
+
+
         <div class="project-type">
             DEVELOPMENT
         </div>

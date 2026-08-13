@@ -23,7 +23,7 @@ layout: null
 
     <section id="home">
         <h1>Karolis Pranciulis</h1>
-        <p>I am a programmer, and my current project is Minecraft plugin development.</p>
+        <p>I am a programmer. My current project is Minecraft plugin development (Kotlin).</p>
     </section>
 
     <section id="skills">
@@ -43,7 +43,7 @@ layout: null
         <h2>Projects</h2>
         <div class="widget-grid">
             {% for project in site.projects %}
-            <a href="{{ project.url | relative_url }}" class="widget">
+            <a href="{{ project.url | relative_url }}" class="widget" target="_blank" rel="noopener">
                 <img src="{{ project.icon | relative_url }}" alt="Project Icon">
                 <h3>{{ project.title }}</h3>
                 <p>{{ project.short_description }}</p>
@@ -55,14 +55,14 @@ layout: null
     <section id="about">
         <h2>About</h2>
         <p>I'm 17 and I live in Kaunas, Lithuania.</p>
-        <p>My hobbies are music and programming.</p>
+        <p>My hobbies are music and programming. I'm a programmer — Minecraft plugin development is one of my current projects.</p>
     </section>
 
     <section id="contact">
         <h2>Contact</h2>
         <div class="contact-icons">
-            <a href="https://github.com/{{ site.github_username }}" target="_blank" title="GitHub">GH</a>
-            <a href="mailto:{{ site.email }}" title="Email">@</a>
+            <a href="https://github.com/karolispranciulis" target="_blank" title="GitHub">GitHub</a>
+            <a href="mailto:pranciuliskarolis@gmail.com" title="Email">pranciuliskarolis@gmail.com</a>
         </div>
     </section>
 

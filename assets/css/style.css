@@ -23,7 +23,6 @@ html {
        Users can still scroll as fast/far as they want. */
     scroll-behavior: smooth;
     scroll-padding-top: 76px;
-    scroll-snap-type: y proximity;
     background: var(--bg);
 }
 
@@ -154,8 +153,6 @@ a {
 /* PANELS */
 
 .panel {
-    scroll-snap-align: start;
-    scroll-snap-stop: normal;
     min-height: 100vh;
     padding: 130px 6vw 100px;
     display: flex;

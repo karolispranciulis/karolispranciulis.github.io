@@ -362,7 +362,9 @@
 
             user-select: none;
 
-            white-space: pre;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
 
             font-family:
                 "JetBrains Mono",
@@ -373,6 +375,14 @@
             font-size: 13px;
 
             line-height: 1.75;
+        }
+
+
+        .line-number {
+            display: block;
+            height: calc(13px * 1.75);
+            line-height: 1.75;
+            white-space: nowrap;
         }
 
 
@@ -512,7 +522,7 @@
 
             <div class="file-list" id="file-list">
 
-                {% assign plugin_folder = page.files_folder | remove_first: "/" %}
+                {% assign plugin_folder = page.files_folder | remove_first: "/" | append: "/" %}
 
                 {% assign plugin_files = site.static_files
                     | where_exp: "file", "file.path contains plugin_folder"
@@ -520,8 +530,8 @@
                 %}
 
                 {% for file in plugin_files %}
-                    {% assign relative_file = file.path | remove_first: plugin_folder %}
-                    {% assign display_path = relative_file | remove_first: "/" %}
+                    {% assign normalized_file_path = file.path | remove_first: "/" %}
+                    {% assign display_path = normalized_file_path | remove_first: plugin_folder %}
                     <div
                         class="file-manifest-item"
                         data-file-url="{{ file.path | relative_url }}"
@@ -731,13 +741,15 @@
             .then(function (text) {
                 code.textContent = text;
 
-                const lineCount = text.split("\n").length;
-                const numbers = Array.from(
-                    { length: lineCount },
-                    function (_, index) { return String(index + 1); }
-                ).join("\n");
+                const lines = text.split("\n");
+                lineNumbers.innerHTML = "";
 
-                lineNumbers.textContent = numbers;
+                lines.forEach(function (_, index) {
+                    const number = document.createElement("span");
+                    number.className = "line-number";
+                    number.textContent = String(index + 1);
+                    lineNumbers.appendChild(number);
+                });
             })
             .catch(function (error) {
                 code.textContent =

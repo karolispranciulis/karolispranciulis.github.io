@@ -1,30 +1,44 @@
 ---
-layout: project_ide
 title: Example Minecraft Plugin
-description: A small Kotlin and Paper plugin demonstrating the project IDE.
+
+description: >
+  A simple Minecraft plugin written in Kotlin using the Paper API.
+
 project: Minecraft Plugin Development (Kotlin)
+
 tags:
   - Kotlin
   - Paper
   - Minecraft
+
 files:
+
   - name: Main.kt
+
+    language: kotlin
+
     content: |
       package dev.karolis.example
 
       import org.bukkit.plugin.java.JavaPlugin
 
       class Main : JavaPlugin() {
+
           override fun onEnable() {
-              logger.info("Plugin has been enabled!")
+              logger.info("Example plugin has been enabled!")
           }
 
           override fun onDisable() {
-              logger.info("Plugin has been disabled!")
+              logger.info("Example plugin has been disabled!")
           }
+
       }
 
+
   - name: plugin.yml
+
+    language: yaml
+
     content: |
       name: ExamplePlugin
       version: 1.0

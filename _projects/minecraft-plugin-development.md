@@ -1,37 +1,19 @@
 ---
-layout: default
 title: Minecraft Plugin Development (Kotlin)
-short_description: Minecraft plugin development with Kotlin and Paper, with source code presented in a simple browser IDE.
+
+short_description: >
+  A collection of Minecraft server plugins built while learning
+  Kotlin, Paper and JVM development.
+
 icon: /assets/projects/minecraft-plugin-development-kotlin.png
+
+permalink: /projects/minecraft-plugin-development-kotlin/
 ---
 
-<main class="page">
-  <div class="page-heading">
-    <div class="eyebrow">PROJECT</div>
-    <h1>{{ page.title }}</h1>
-    <p>{{ page.short_description }}</p>
-  </div>
+This project is where I experiment with Minecraft server development
+using **Kotlin** and **Paper**.
 
-  <section>
-    <div class="section-label">PLUGINS</div>
-    <div class="plugin-grid">
-      {% assign plugins = site.plugins | where: "project", page.title %}
-      {% for plugin in plugins %}
-      <a class="plugin-card" href="{{ plugin.url | relative_url }}">
-        <div class="plugin-card-top">
-          <span class="plugin-icon">&lt;/&gt;</span>
-          <span class="plugin-arrow">↗</span>
-        </div>
-        <h2>{{ plugin.title }}</h2>
-        <p>{{ plugin.description }}</p>
-        {% if plugin.tags %}
-        <div class="project-tags">
-          {% for tag in plugin.tags %}<span>{{ tag }}</span>{% endfor %}
-        </div>
-        {% endif %}
-      </a>
-      {% endfor %}
-    </div>
-  </section>
-</main>
----
+Instead of putting every plugin directly into this page, each plugin
+has its own file in the `_plugins` folder.
+
+That makes it easy to add new plugins without changing the website code.

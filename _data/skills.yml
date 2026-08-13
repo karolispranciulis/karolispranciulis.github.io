@@ -1,4 +1,14 @@
 - name: Kotlin
-  image: /assets/skills/kotlin.png
-  description: Primary language for JVM applications and plugin development. Used for software and Minecraft plugin projects.
-# To add a new skill later: add another block here and drop the PNG into /assets/skills/ (keep the image path)
+  description: >
+    My primary programming language for JVM development and
+    Minecraft plugin development.
+
+- name: Git
+  description: >
+    Version control and GitHub for managing projects and
+    keeping development organized.
+
+- name: Java / JVM
+  description: >
+    Familiarity with the JVM ecosystem, libraries, APIs and
+    software built around Java and Kotlin.

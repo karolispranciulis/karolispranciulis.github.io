@@ -8,7 +8,7 @@ Contact, Contact section with GitHub + Gmail. So none of that needed
 touching.
 
 This package replaces/adds the pieces that actually needed work: theme,
-scroll behaviour, the project carousel, and the code viewer.
+scroll behaviour, the project carousel, and the code viewer. 
 
 ## 1. Copy these files into your repo (overwrite where they already exist)
 

@@ -1,7 +1,6 @@
 title: Karolis Pranciulis
 email: pranciuliskarolis@gmail.com
 github_username: karolispranciulis
-# We will use custom HTML/CSS, no default theme needed.
 include: [".well-known"]
 
 collections:

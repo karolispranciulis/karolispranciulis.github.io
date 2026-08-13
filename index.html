@@ -11,7 +11,6 @@ layout: null
 </head>
 <body>
 
-    <!-- Top Navigation -->
     <nav class="navbar">
         <a href="#home" class="home-btn">xao3</a>
         <div class="nav-links">
@@ -22,51 +21,43 @@ layout: null
         </div>
     </nav>
 
-    <!-- Home / Landing Section -->
     <section id="home">
         <h1>Karolis Pranciulis</h1>
-        <p>I am a programmer, and currently my main focus is Minecraft plugin development.</p>
+        <p>I am a programmer, and my current project is Minecraft plugin development.</p>
     </section>
 
-    <!-- Skills Section -->
     <section id="skills">
         <h2>Skills</h2>
-        <p>Languages and tools I have mastered.</p>
         <div class="widget-grid">
             {% for skill in site.data.skills %}
             <div class="widget">
                 <img src="{{ skill.image | relative_url }}" alt="{{ skill.name }}">
                 <h3>{{ skill.name }}</h3>
-                <p style="font-size: 0.9rem; margin:0;">{{ skill.description }}</p>
+                <p>{{ skill.description }}</p>
             </div>
             {% endfor %}
         </div>
     </section>
 
-    <!-- Projects Section -->
     <section id="projects">
         <h2>Projects</h2>
-        <p>Click on a project to view the source code and details.</p>
         <div class="widget-grid">
             {% for project in site.projects %}
-            <!-- This opens the dedicated project page Jekyll generates -->
-            <a href="{{ project.url | relative_url }}" class="widget" target="_blank">
-                <img src="{{ project.icon | relative_url | default: '/assets/images/kotlin.png' }}" alt="Project Icon">
+            <a href="{{ project.url | relative_url }}" class="widget">
+                <img src="{{ project.icon | relative_url }}" alt="Project Icon">
                 <h3>{{ project.title }}</h3>
-                <p style="font-size: 0.9rem; margin:0;">{{ project.short_description }}</p>
+                <p>{{ project.short_description }}</p>
             </a>
             {% endfor %}
         </div>
     </section>
 
-    <!-- About Section -->
     <section id="about">
         <h2>About</h2>
-        <p>I'm 17 and I live in Lithuania, Kaunas.</p>
+        <p>I'm 17 and I live in Kaunas, Lithuania.</p>
         <p>My hobbies are music and programming.</p>
     </section>
 
-    <!-- Contact Section -->
     <section id="contact">
         <h2>Contact</h2>
         <div class="contact-icons">

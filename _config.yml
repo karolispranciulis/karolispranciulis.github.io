@@ -6,7 +6,6 @@ github_username: karolispranciulis
 
 include:
   - ".well-known"
-  - "plugins"
 
 
 collections:

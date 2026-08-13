@@ -6,7 +6,5 @@ description: >
   
 project: Minecraft Plugin Development (Kotlin)
 
-files:
-  - /plugins/MsgPlugin/files/MessageCommand.kt
-  - /plugins/MsgPlugin/files/TestPlugin.kt
+files_folder: plugins/MsgPlugin/files/
 ---

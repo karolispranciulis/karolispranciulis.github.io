@@ -4,25 +4,56 @@ title: Projects
 permalink: /projects/
 ---
 
-<main class="page">
-  <div class="page-heading">
-    <div class="eyebrow">SELECTED WORK</div>
-    <h1>Projects</h1>
-    <p>Explore my projects and open a project to see the plugins and source files inside it.</p>
-  </div>
+<div class="page-heading">
 
-  <section class="project-list">
-    {% for project in site.projects %}
-    <a class="project-card project-card-large" href="{{ project.url | relative_url }}">
-      <div class="project-card-top">
-        <img src="{{ project.icon | relative_url }}" alt="{{ project.title }}">
-        <span class="project-arrow">↗</span>
-      </div>
-      <div class="project-type">PROJECT</div>
-      <h2>{{ project.title }}</h2>
-      <p>{{ project.short_description }}</p>
-      <div class="project-card-link">View project</div>
+    <div class="eyebrow">
+        PORTFOLIO
+    </div>
+
+    <h1>
+        Projects
+    </h1>
+
+    <p>
+        Things I've built while learning and experimenting
+        with programming.
+    </p>
+
+</div>
+
+
+<section class="project-grid">
+
+    <a
+        class="project-card"
+        href="{{ '/projects/minecraft-plugin-development-kotlin/' | relative_url }}"
+    >
+
+        <div class="project-card-top">
+
+            <span class="project-icon">
+                ⌘
+            </span>
+
+        </div>
+
+
+        <div class="project-type">
+            DEVELOPMENT
+        </div>
+
+
+        <h2>
+            Minecraft Plugin Development (Kotlin)
+        </h2>
+
+
+        <p>
+            Minecraft server plugins and experiments
+            built while learning Kotlin and Paper.
+        </p>
+
+
     </a>
-    {% endfor %}
-  </section>
-</main>
+
+</section>

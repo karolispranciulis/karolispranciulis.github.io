@@ -3,126 +3,218 @@ layout: null
 ---
 
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Karolis Pranciulis | Programmer</title>
+<meta charset="UTF-8">
 
-    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    Karolis Pranciulis | Programmer
+</title>
+
+<link
+    rel="stylesheet"
+    href="{{ '/assets/css/style.css' | relative_url }}"
+>
+
 </head>
+
 
 <body>
 
-<header class="navbar">
 
-    <a href="#home" class="logo">
-        karolis<span>pranciulis</span>
+<nav class="navbar">
+
+    <a
+        href="#home"
+        class="home-btn"
+    >
+        xao3
     </a>
 
-    <nav class="nav-links">
-        <a href="#skills">Skills</a>
-        <a href="#projects">Projects</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-    </nav>
 
-</header>
+    <div class="nav-links">
+
+        <a href="#skills">
+            Skills
+        </a>
+
+        <a href="#projects">
+            Projects
+        </a>
+
+        <a href="#about">
+            About
+        </a>
+
+        <a href="#contact">
+            Contact
+        </a>
+
+    </div>
+
+</nav>
 
 
-<main>
 
-    <!-- HOME -->
+<main id="site-root">
 
-    <section id="home" class="hero panel">
 
-        <div class="hero-content">
+    <!-- =========================
+         HOME
+    ========================== -->
+
+    <section
+        id="home"
+        class="panel hero"
+    >
+
+        <div class="panel-inner hero-content">
 
             <div class="hero-eyebrow">
-                PROGRAMMER · KOTLIN · SOFTWARE
+                PROGRAMMER • BUILDER • LEARNER
             </div>
 
-            <h1>
-                Karolis<br>
+
+            <h1 class="home-title">
+
+                Karolis
                 <span>Pranciulis</span>
+
             </h1>
 
+
             <p class="hero-description">
-                I enjoy building software, learning how computers work,
-                and turning ideas into working projects.
+
+                I enjoy building things with code, exploring how
+                software works, and learning something new with
+                every project.
+
             </p>
+
 
             <p class="hero-description secondary">
-                I mainly work with Kotlin and JVM technologies, with a
-                particular interest in Minecraft plugin development,
-                software development, and experimenting with new ideas.
+
+                This website is a place to share what I have learned,
+                the projects I have built, and the skills I continue
+                developing through experience.
+
             </p>
 
+
             <div class="hero-actions">
-                <a href="#projects" class="primary-button">
+
+                <a
+                    href="#projects"
+                    class="primary-button"
+                >
                     View my projects
-                    <span>→</span>
                 </a>
 
-                <a href="#contact" class="secondary-button">
+
+                <a
+                    href="#contact"
+                    class="secondary-button"
+                >
                     Get in touch
                 </a>
+
             </div>
 
         </div>
 
+
         <div class="hero-decoration">
+
             <div class="decoration-card">
+
                 <div class="decoration-dot"></div>
+
                 <div class="decoration-line large"></div>
                 <div class="decoration-line"></div>
                 <div class="decoration-line short"></div>
+
             </div>
+
         </div>
 
     </section>
 
 
-    <!-- SKILLS -->
 
-    <section id="skills" class="panel content-panel">
+    <!-- =========================
+         SKILLS
+    ========================== -->
+
+    <section
+        id="skills"
+        class="panel content-panel"
+    >
 
         <div class="section-container">
+
 
             <div class="section-heading">
 
                 <div class="eyebrow">
-                    01 · SKILLS
+                    SKILLS
                 </div>
 
+
                 <h2>
-                    Technologies I use
+                    Skills I've learned through my experience
                 </h2>
 
+
                 <p>
-                    These are some of the technologies and tools I use
-                    while building projects and learning software development.
+                    The technologies, tools and programming concepts
+                    I have picked up while building projects and
+                    experimenting with software.
                 </p>
 
             </div>
 
 
-            <div class="widget-grid">
+            <div
+                class="widget-grid"
+                id="skills-grid"
+            >
 
                 {% for skill in site.data.skills %}
 
                 <div class="skill-widget">
 
                     <div class="skill-icon">
-                        {{ skill.name | slice: 0, 1 }}
+
+                        {% if skill.image %}
+
+                        <img
+                            src="{{ skill.image | relative_url }}"
+                            alt="{{ skill.name }}"
+                        >
+
+                        {% else %}
+
+                        {{ skill.name | slice: 0, 2 }}
+
+                        {% endif %}
+
                     </div>
+
 
                     <div class="skill-content">
 
                         <h3>
                             {{ skill.name }}
                         </h3>
+
 
                         <p>
                             {{ skill.description }}
@@ -134,73 +226,6 @@ layout: null
 
                 {% endfor %}
 
-                <div class="skill-widget">
-
-                    <div class="skill-icon">
-                        JVM
-                    </div>
-
-                    <div class="skill-content">
-
-                        <h3>
-                            JVM Development
-                        </h3>
-
-                        <p>
-                            Experience working with JVM-based software,
-                            libraries, APIs and project structures.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="skill-widget">
-
-                    <div class="skill-icon">
-                        MC
-                    </div>
-
-                    <div class="skill-content">
-
-                        <h3>
-                            Minecraft Plugins
-                        </h3>
-
-                        <p>
-                            Building Minecraft server plugins with Kotlin
-                            and Paper while learning more about APIs,
-                            events and server-side development.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="skill-widget">
-
-                    <div class="skill-icon">
-                        Git
-                    </div>
-
-                    <div class="skill-content">
-
-                        <h3>
-                            Git & GitHub
-                        </h3>
-
-                        <p>
-                            Using Git and GitHub to manage projects,
-                            experiment with code and keep development
-                            organized.
-                        </p>
-
-                    </div>
-
-                </div>
-
             </div>
 
         </div>
@@ -208,98 +233,143 @@ layout: null
     </section>
 
 
-    <!-- PROJECTS -->
 
-    <section id="projects" class="panel content-panel">
+    <!-- =========================
+         PROJECTS
+    ========================== -->
+
+    <section
+        id="projects"
+        class="panel content-panel projects-section"
+    >
 
         <div class="section-container">
 
-            <div class="section-heading">
+
+            <div class="section-heading project-heading">
 
                 <div class="eyebrow">
-                    02 · PROJECTS
+                    PROJECTS
                 </div>
+
 
                 <h2>
                     Things I've built
                 </h2>
 
+
                 <p>
-                    A collection of projects I've worked on while
-                    developing my programming skills.
+                    A selection of projects I have worked on while
+                    learning and experimenting with programming.
                 </p>
 
             </div>
 
 
-            <div class="project-grid">
+            <div class="projects-carousel-wrap">
 
-                {% for project in site.projects %}
 
-                <a
-                    href="{{ project.url | relative_url }}"
-                    class="large-project-card"
+                <button
+                    type="button"
+                    class="carousel-arrow carousel-prev"
+                    aria-label="Previous project"
+                >
+                    ‹
+                </button>
+
+
+                <div
+                    class="projects-viewport"
+                    id="projects-viewport"
                 >
 
-                    <div class="project-card-header">
+                    <div
+                        class="projects-track"
+                        id="projects-track"
+                    >
 
-                        <div class="project-card-icon">
-                            {% if project.icon %}
+                        {% for project in site.projects %}
+
+                        <a
+                            href="{{ project.url | relative_url }}"
+                            class="project-item"
+                        >
+
+                            <div class="project-image">
+
                                 <img
                                     src="{{ project.icon | relative_url }}"
-                                    alt=""
+                                    alt="{{ project.title }}"
                                 >
-                            {% else %}
-                                &lt;/&gt;
-                            {% endif %}
-                        </div>
 
-                        <span class="project-arrow">
-                            ↗
-                        </span>
+                            </div>
+
+
+                            <div class="project-type">
+                                PROJECT
+                            </div>
+
+
+                            <h3>
+                                {{ project.title }}
+                            </h3>
+
+
+                            <p>
+                                {{ project.short_description }}
+                            </p>
+
+                        </a>
+
+                        {% endfor %}
 
                     </div>
 
-                    <div class="project-card-label">
-                        PROJECT
-                    </div>
+                </div>
 
-                    <h3>
-                        {{ project.title }}
-                    </h3>
 
-                    <p>
-                        {{ project.short_description }}
-                    </p>
+                <button
+                    type="button"
+                    class="carousel-arrow carousel-next"
+                    aria-label="Next project"
+                >
+                    ›
+                </button>
 
-                    <div class="project-card-footer">
-                        <span>Kotlin</span>
-                        <span>Minecraft</span>
-                        <span>Development</span>
-                    </div>
-
-                </a>
-
-                {% endfor %}
 
             </div>
+
+
+            <div
+                class="carousel-dots"
+                id="carousel-dots"
+            ></div>
+
 
         </div>
 
     </section>
 
 
-    <!-- ABOUT -->
 
-    <section id="about" class="panel content-panel">
+    <!-- =========================
+         ABOUT
+    ========================== -->
 
-        <div class="section-container about-container">
+    <section
+        id="about"
+        class="panel content-panel"
+    >
+
+        <div class="section-container">
+
 
             <div class="section-heading">
 
                 <div class="eyebrow">
-                    03 · ABOUT
+                    ABOUT
                 </div>
+
 
                 <h2>
                     A little about me
@@ -310,27 +380,34 @@ layout: null
 
             <div class="about-grid">
 
+
                 <div class="about-main">
 
                     <p class="large-text">
-                        I'm a programmer from Kaunas, Lithuania.
-                        I enjoy spending my time learning about technology,
-                        programming and building things with computers.
+
+                        I'm 17 and I live in Kaunas, Lithuania.
+
                     </p>
 
-                    <p>
-                        I love computers because there is always something
-                        new to discover. Whether it is understanding how
-                        software works, learning a new programming language,
-                        solving a problem or creating something completely
-                        new, there is always another challenge to explore.
-                    </p>
 
                     <p>
-                        Programming is one of my main hobbies. I particularly
-                        enjoy working with Kotlin and JVM technologies,
-                        and Minecraft plugin development gives me a fun way
-                        to experiment with real software projects.
+
+                        I enjoy programming, music, and spending time
+                        exploring computers and technology. I love
+                        computers because there is always something
+                        new to understand, build, improve, or experiment
+                        with.
+
+                    </p>
+
+
+                    <p>
+
+                        Programming has become one of the ways I like
+                        to turn ideas into something real. I learn
+                        mostly by building things, making mistakes,
+                        fixing them, and trying again.
+
                     </p>
 
                 </div>
@@ -339,26 +416,45 @@ layout: null
                 <div class="about-facts">
 
                     <div class="fact">
-                        <span>Location</span>
-                        <strong>Kaunas, Lithuania</strong>
+
+                        <span>
+                            Location
+                        </span>
+
+                        <strong>
+                            Kaunas, Lithuania
+                        </strong>
+
                     </div>
 
-                    <div class="fact">
-                        <span>Focus</span>
-                        <strong>Software Development</strong>
-                    </div>
 
                     <div class="fact">
-                        <span>Language</span>
-                        <strong>Kotlin</strong>
+
+                        <span>
+                            Interests
+                        </span>
+
+                        <strong>
+                            Programming & Music
+                        </strong>
+
                     </div>
 
+
                     <div class="fact">
-                        <span>Interests</span>
-                        <strong>Computers & Music</strong>
+
+                        <span>
+                            Focus
+                        </span>
+
+                        <strong>
+                            Learning by building
+                        </strong>
+
                     </div>
 
                 </div>
+
 
             </div>
 
@@ -367,25 +463,34 @@ layout: null
     </section>
 
 
-    <!-- CONTACT -->
 
-    <section id="contact" class="panel content-panel">
+    <!-- =========================
+         CONTACT
+    ========================== -->
+
+    <section
+        id="contact"
+        class="panel content-panel"
+    >
 
         <div class="section-container contact-container">
+
 
             <div class="section-heading">
 
                 <div class="eyebrow">
-                    04 · CONTACT
+                    CONTACT
                 </div>
+
 
                 <h2>
                     Let's connect
                 </h2>
 
+
                 <p>
-                    If you want to see my code, talk about programming,
-                    or just get in touch, you can find me here.
+                    If you want to talk about programming or just get
+                    in touch, you can find me here.
                 </p>
 
             </div>
@@ -393,30 +498,33 @@ layout: null
 
             <div class="contact-grid">
 
-                <!-- GITHUB -->
 
                 <a
+                    class="contact-card"
                     href="https://github.com/karolispranciulis"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="contact-card"
                 >
 
-                    <div class="contact-icon github-icon">
+                    <div class="contact-icon">
 
                         <svg
                             viewBox="0 0 24 24"
+                            fill="currentColor"
                             aria-hidden="true"
                         >
+
                             <path
-                                fill="currentColor"
-                                d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.85 10.91.57.1.78-.25.78-.55v-2.12c-3.19.69-3.86-1.35-3.86-1.35-.52-1.32-1.28-1.67-1.28-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.03 1.75 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.73.81 1.18 1.84 1.18 3.1 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.08.78 2.18v3.23c0 .3.2.66.79.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
+                                d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.8 0c2.21-1.5 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.4-5.25 5.69.41.36.78 1.08.78 2.18v3.24c0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
                             />
+
                         </svg>
 
                     </div>
 
+
                     <div>
+
                         <span class="contact-label">
                             GitHub
                         </span>
@@ -424,37 +532,47 @@ layout: null
                         <strong>
                             github.com/karolispranciulis
                         </strong>
-                    </div>
 
-                    <span class="contact-arrow">
-                        ↗
-                    </span>
+                    </div>
 
                 </a>
 
 
-                <!-- EMAIL -->
 
                 <a
-                    href="mailto:pranciuliskarolis@gmail.com"
                     class="contact-card"
+                    href="mailto:pranciuliskarolis@gmail.com"
                 >
 
-                    <div class="contact-icon gmail-icon">
+                    <div class="contact-icon">
 
                         <svg
                             viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
                             aria-hidden="true"
                         >
-                            <path
-                                fill="currentColor"
-                                d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.5-.5a.5.5 0 0 0-.5.5v.25l8 5.55 8-5.55V5.5a.5.5 0 0 0-.5-.5h-15ZM20 8.18l-7.43 5.16a1 1 0 0 1-1.14 0L4 8.18v10.32c0 .28.22.5.5.5h15a.5.5 0 0 0 .5-.5V8.18Z"
+
+                            <rect
+                                x="3"
+                                y="5"
+                                width="18"
+                                height="14"
+                                rx="2"
                             />
+
+                            <path
+                                d="m4 7 8 6 8-6"
+                            />
+
                         </svg>
 
                     </div>
 
+
                     <div>
+
                         <span class="contact-label">
                             Email
                         </span>
@@ -462,13 +580,11 @@ layout: null
                         <strong>
                             pranciuliskarolis@gmail.com
                         </strong>
+
                     </div>
 
-                    <span class="contact-arrow">
-                        ↗
-                    </span>
-
                 </a>
+
 
             </div>
 
@@ -476,10 +592,12 @@ layout: null
 
     </section>
 
+
 </main>
 
 
 <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
 
 </body>
+
 </html>

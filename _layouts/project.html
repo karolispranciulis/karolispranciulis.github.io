@@ -15,6 +15,7 @@
         {{ page.title }} | Karolis Pranciulis
     </title>
 
+
     <link
         rel="stylesheet"
         href="{{ '/assets/css/style.css' | relative_url }}"
@@ -25,13 +26,15 @@
 
 <body>
 
+
 <header class="navbar">
+
 
     <a
         href="{{ '/' | relative_url }}"
-        class="logo"
+        class="home-btn"
     >
-        karolis<span>pranciulis</span>
+        xao3
     </a>
 
 
@@ -55,12 +58,16 @@
 
     </nav>
 
+
 </header>
+
 
 
 <main class="page">
 
+
     <div class="page-container">
+
 
         <a
             href="{{ '/' | relative_url }}#projects"
@@ -85,34 +92,30 @@
         </p>
 
 
-        <div class="eyebrow" style="margin-bottom: 18px;">
+        <div
+            class="eyebrow"
+            style="margin-bottom: 18px;"
+        >
             PLUGINS
         </div>
 
 
         <div class="plugin-grid">
 
-            {% assign project_plugins = site.plugins | where: "project", page.title %}
+
+            {% assign project_plugins =
+                site.plugins
+                | where: "project", page.title
+            %}
+
 
             {% for plugin in project_plugins %}
+
 
             <a
                 href="{{ plugin.url | relative_url }}"
                 class="plugin-card"
             >
-
-                <div class="plugin-tags">
-
-                    {% for tag in plugin.tags %}
-
-                    <span>
-                        {{ tag }}
-                    </span>
-
-                    {% endfor %}
-
-                </div>
-
 
                 <h2>
                     {{ plugin.title }}
@@ -125,7 +128,9 @@
 
             </a>
 
+
             {% endfor %}
+
 
         </div>
 
@@ -138,6 +143,7 @@
                 No plugins yet
             </h2>
 
+
             <p>
                 Add a plugin to the
                 <code>_plugins</code>
@@ -148,7 +154,9 @@
 
         {% endif %}
 
+
     </div>
+
 
 </main>
 

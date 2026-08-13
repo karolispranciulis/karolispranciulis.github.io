@@ -1,379 +1,617 @@
 (function () {
-    "use strict";
 
     /* =====================================================
        NAVIGATION
     ===================================================== */
 
-    document.querySelectorAll(".nav-links a").forEach(function (link) {
+    const navLinks =
+        document.querySelectorAll(".nav-links a");
+
+
+    navLinks.forEach(function (link) {
+
         link.addEventListener("click", function () {
-            document.querySelector(".nav-links")?.classList.remove("open");
+
+            document
+                .querySelector(".nav-links")
+                ?.classList.remove("open");
+
         });
+
     });
+
 
 
     /* =====================================================
        PROJECT CAROUSEL
     ===================================================== */
 
-    const viewport = document.getElementById("projects-viewport");
-    const track = document.getElementById("projects-track");
-    const previousButton = document.querySelector(".carousel-prev");
-    const nextButton = document.querySelector(".carousel-next");
-    const dotsContainer = document.getElementById("carousel-dots");
-    const projectsSection = document.getElementById("projects");
+    const viewport =
+        document.getElementById("projects-viewport");
 
-    let carouselReady = false;
-    let originalItems = [];
+    const track =
+        document.getElementById("projects-track");
+
+    const previousButton =
+        document.querySelector(".carousel-prev");
+
+    const nextButton =
+        document.querySelector(".carousel-next");
+
+    const dotsContainer =
+        document.getElementById("carousel-dots");
+
+
+    if (
+        !viewport ||
+        !track ||
+        !previousButton ||
+        !nextButton
+    ) {
+        return;
+    }
+
+
+    let originalItems =
+        Array.from(
+            track.querySelectorAll(".project-item")
+        );
+
+
     let currentIndex = 0;
-    let autoPlay = null;
+
+    let autoPlay;
+
+
+    /*
+     * Number of cards visible.
+     */
 
     function getVisibleCount() {
-        return window.innerWidth <= 900 ? 1 : 2;
+
+        return window.innerWidth <= 900
+            ? 1
+            : 2;
+
     }
 
-    function updatePosition(animate) {
-        if (!track || !track.children.length) return;
 
-        const firstCard = track.querySelector(".project-item");
-        if (!firstCard) return;
+    /*
+     * Don't create an unnecessarily complicated
+     * infinite carousel if there is only one project.
+     */
 
-        const cardWidth = firstCard.getBoundingClientRect().width;
-        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+    if (originalItems.length <= 1) {
 
-        track.style.transition = animate
-            ? "transform .55s cubic-bezier(.22,.61,.36,1)"
-            : "none";
+        previousButton.style.display = "none";
 
-        track.style.transform =
-            "translateX(-" + currentIndex * (cardWidth + gap) + "px)";
+        nextButton.style.display = "none";
 
-        if (!animate) {
-            requestAnimationFrame(function () {
-                track.style.transition =
-                    "transform .55s cubic-bezier(.22,.61,.36,1)";
-            });
+        if (dotsContainer) {
+            dotsContainer.style.display = "none";
         }
 
-        updateDots();
+        return;
+
     }
 
-    function updateDots() {
-        if (!dotsContainer || !originalItems.length) return;
 
-        const visible = getVisibleCount();
-        let realIndex = currentIndex - visible;
+    /*
+     * Clone cards at both ends.
+     *
+     * This allows:
+     *
+     * A B C D
+     *
+     * to behave like:
+     *
+     * C D | A B C D | A B
+     */
 
-        realIndex =
-            (realIndex % originalItems.length + originalItems.length) %
-            originalItems.length;
+    function createLoop() {
 
-        dotsContainer.querySelectorAll(".carousel-dot").forEach(function (dot, index) {
-            dot.classList.toggle("active", index === realIndex);
+        const visible =
+            getVisibleCount();
+
+
+        track.innerHTML = "";
+
+
+        const before =
+            originalItems
+                .slice(-visible)
+                .map(function (item) {
+                    return item.cloneNode(true);
+                });
+
+
+        const after =
+            originalItems
+                .slice(0, visible)
+                .map(function (item) {
+                    return item.cloneNode(true);
+                });
+
+
+        before.forEach(function (item) {
+            track.appendChild(item);
         });
+
+
+        originalItems.forEach(function (item) {
+            track.appendChild(
+                item.cloneNode(true)
+            );
+        });
+
+
+        after.forEach(function (item) {
+            track.appendChild(item);
+        });
+
+
+        currentIndex = visible;
+
+
+        updatePosition(false);
+
+        createDots();
+
     }
+
+
+    /*
+     * Move the track.
+     */
+
+    function updatePosition(animate) {
+
+        const firstCard =
+            track.querySelector(".project-item");
+
+
+        if (!firstCard) {
+            return;
+        }
+
+
+        const cardWidth =
+            firstCard.getBoundingClientRect().width;
+
+
+        const gap =
+            parseFloat(
+                getComputedStyle(track).gap
+            ) || 0;
+
+
+        if (!animate) {
+
+            track.style.transition = "none";
+
+        } else {
+
+            track.style.transition =
+                "transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1)";
+
+        }
+
+
+        track.style.transform =
+            "translateX(-" +
+            (
+                currentIndex *
+                (cardWidth + gap)
+            ) +
+            "px)";
+
+
+        if (!animate) {
+
+            requestAnimationFrame(function () {
+
+                track.style.transition =
+                    "transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1)";
+
+            });
+
+        }
+
+
+        updateDots();
+
+    }
+
+
+    /*
+     * Move forward.
+     */
+
+    function next() {
+
+        currentIndex++;
+
+        updatePosition(true);
+
+    }
+
+
+    /*
+     * Move backwards.
+     */
+
+    function previous() {
+
+        currentIndex--;
+
+        updatePosition(true);
+
+    }
+
+
+    /*
+     * When reaching a cloned card,
+     * silently jump back into the real list.
+     */
+
+    track.addEventListener(
+        "transitionend",
+        function () {
+
+            const visible =
+                getVisibleCount();
+
+
+            const total =
+                originalItems.length;
+
+
+            if (
+                currentIndex >=
+                total + visible
+            ) {
+
+                currentIndex =
+                    visible;
+
+                updatePosition(false);
+
+            }
+
+
+            if (
+                currentIndex < visible
+            ) {
+
+                currentIndex =
+                    total + visible - 1;
+
+                updatePosition(false);
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Buttons.
+     */
+
+    nextButton.addEventListener(
+        "click",
+        function () {
+
+            next();
+
+            restartAutoPlay();
+
+        }
+    );
+
+
+    previousButton.addEventListener(
+        "click",
+        function () {
+
+            previous();
+
+            restartAutoPlay();
+
+        }
+    );
+
+
+
+    /* =====================================================
+       DOTS
+    ===================================================== */
 
     function createDots() {
-        if (!dotsContainer) return;
+
+        if (!dotsContainer) {
+            return;
+        }
+
 
         dotsContainer.innerHTML = "";
 
-        originalItems.forEach(function (_, index) {
-            const dot = document.createElement("button");
-            dot.type = "button";
-            dot.className = "carousel-dot";
-            dot.setAttribute("aria-label", "Go to project " + (index + 1));
 
-            dot.addEventListener("click", function () {
-                currentIndex = getVisibleCount() + index;
-                updatePosition(true);
-                restartAutoPlay();
-            });
+        originalItems.forEach(
+            function (_, index) {
 
-            dotsContainer.appendChild(dot);
-        });
-    }
+                const dot =
+                    document.createElement("button");
 
-    function createLoop() {
-        if (!track) return;
 
-        const visible = getVisibleCount();
-        track.innerHTML = "";
+                dot.type = "button";
 
-        originalItems.slice(-visible).forEach(function (item) {
-            track.appendChild(item.cloneNode(true));
-        });
 
-        originalItems.forEach(function (item) {
-            track.appendChild(item.cloneNode(true));
-        });
+                dot.className =
+                    "carousel-dot";
 
-        originalItems.slice(0, visible).forEach(function (item) {
-            track.appendChild(item.cloneNode(true));
-        });
 
-        currentIndex = visible;
-        updatePosition(false);
-        createDots();
-    }
+                dot.setAttribute(
+                    "aria-label",
+                    "Go to project " +
+                    (index + 1)
+                );
 
-    function nextProject() {
-        if (!carouselReady) return;
-        currentIndex++;
-        updatePosition(true);
-    }
 
-    function previousProject() {
-        if (!carouselReady) return;
-        currentIndex--;
-        updatePosition(true);
-    }
+                dot.addEventListener(
+                    "click",
+                    function () {
 
-    function startAutoPlay() {
-        if (!carouselReady) return;
-        clearInterval(autoPlay);
-        autoPlay = setInterval(nextProject, 5000);
-    }
+                        const visible =
+                            getVisibleCount();
 
-    function restartAutoPlay() {
-        startAutoPlay();
-    }
 
-    if (viewport && track) {
-        originalItems = Array.from(track.querySelectorAll(".project-item"));
+                        currentIndex =
+                            visible + index;
 
-        if (originalItems.length > 1) {
-            carouselReady = true;
 
-            createLoop();
-            startAutoPlay();
+                        updatePosition(true);
 
-            nextButton?.addEventListener("click", function () {
-                nextProject();
-                restartAutoPlay();
-            });
+                        restartAutoPlay();
 
-            previousButton?.addEventListener("click", function () {
-                previousProject();
-                restartAutoPlay();
-            });
-
-            viewport.addEventListener("mouseenter", function () {
-                clearInterval(autoPlay);
-            });
-
-            viewport.addEventListener("mouseleave", function () {
-                startAutoPlay();
-            });
-
-            track.addEventListener("transitionend", function () {
-                const visible = getVisibleCount();
-                const total = originalItems.length;
-
-                if (currentIndex >= total + visible) {
-                    currentIndex = visible;
-                    updatePosition(false);
-                } else if (currentIndex < visible) {
-                    currentIndex = total + visible - 1;
-                    updatePosition(false);
-                }
-            });
-
-            let resizeTimer;
-
-            window.addEventListener("resize", function () {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(createLoop, 150);
-            });
-
-            /* Mouse-wheel / trackpad over projects moves the carousel. */
-            viewport.addEventListener(
-                "wheel",
-                function (event) {
-                    if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
-                    if (Math.abs(event.deltaY) < 10) return;
-
-                    event.preventDefault();
-
-                    if (event.deltaY > 0) {
-                        nextProject();
-                    } else {
-                        previousProject();
                     }
-
-                    restartAutoPlay();
-                },
-                { passive: false }
-            );
-
-            /* Touch swipe on mobile. */
-            let touchStartX = 0;
-
-            viewport.addEventListener("touchstart", function (event) {
-                touchStartX = event.touches[0].clientX;
-            }, { passive: true });
-
-            viewport.addEventListener("touchend", function (event) {
-                const touchEndX = event.changedTouches[0].clientX;
-                const distance = touchEndX - touchStartX;
-
-                if (Math.abs(distance) < 45) return;
-
-                if (distance < 0) {
-                    nextProject();
-                } else {
-                    previousProject();
-                }
-
-                restartAutoPlay();
-            }, { passive: true });
-        } else {
-            /* There is currently one project. Keep the layout ready for more. */
-            if (previousButton) previousButton.disabled = true;
-            if (nextButton) nextButton.disabled = true;
-            if (dotsContainer) dotsContainer.style.display = "none";
-        }
-    }
+                );
 
 
-    /* =====================================================
-       PROJECT SECTION REVEAL
-    ===================================================== */
+                dotsContainer.appendChild(dot);
 
-    if (projectsSection) {
-        const observer = new IntersectionObserver(
-            function (entries) {
-                entries.forEach(function (entry) {
-                    if (!entry.isIntersecting) return;
-
-                    const wrap = entry.target.querySelector(".projects-carousel-wrap");
-                    if (!wrap) return;
-
-                    wrap.classList.remove("is-revealing");
-                    void wrap.offsetWidth;
-                    wrap.classList.add("is-revealing");
-                });
-            },
-            { threshold: 0.25 }
+            }
         );
 
-        observer.observe(projectsSection);
     }
 
 
-    /* =====================================================
-       SECTION AUTO SCROLL
+    function updateDots() {
 
-       One wheel gesture = one section. A large/fast wheel delta
-       never skips multiple sections, and the lock remains active
-       until the smooth anchor-style movement has finished.
+        if (!dotsContainer) {
+            return;
+        }
+
+
+        const dots =
+            dotsContainer.querySelectorAll(
+                ".carousel-dot"
+            );
+
+
+        const visible =
+            getVisibleCount();
+
+
+        let realIndex =
+            currentIndex - visible;
+
+
+        realIndex =
+            (
+                realIndex %
+                originalItems.length +
+                originalItems.length
+            ) %
+            originalItems.length;
+
+
+        dots.forEach(
+            function (dot, index) {
+
+                dot.classList.toggle(
+                    "active",
+                    index === realIndex
+                );
+
+            }
+        );
+
+    }
+
+
+
+    /* =====================================================
+       AUTO LOOP
+    ===================================================== */
+
+    function startAutoPlay() {
+
+        clearInterval(autoPlay);
+
+
+        autoPlay =
+            setInterval(
+                function () {
+
+                    next();
+
+                },
+                4500
+            );
+
+    }
+
+
+    function restartAutoPlay() {
+
+        startAutoPlay();
+
+    }
+
+
+    /*
+     * Don't auto-move while the mouse is
+     * over the carousel.
+     */
+
+    viewport.addEventListener(
+        "mouseenter",
+        function () {
+
+            clearInterval(autoPlay);
+
+        }
+    );
+
+
+    viewport.addEventListener(
+        "mouseleave",
+        function () {
+
+            startAutoPlay();
+
+        }
+    );
+
+
+
+    /* =====================================================
+       RESIZE
+    ===================================================== */
+
+    let resizeTimer;
+
+
+    window.addEventListener(
+        "resize",
+        function () {
+
+            clearTimeout(resizeTimer);
+
+
+            resizeTimer =
+                setTimeout(
+                    function () {
+
+                        createLoop();
+
+                    },
+                    150
+                );
+
+        }
+    );
+
+
+    createLoop();
+
+    startAutoPlay();
+
+
+
+    /* =====================================================
+       SECTION NAVIGATION / SOFT SNAP
     ===================================================== */
 
     const sections = Array.from(
         document.querySelectorAll("main > section")
     );
 
-    let sectionScrollLocked = false;
-    let unlockTimer = null;
-
-    function getCurrentSectionIndex() {
-        if (!sections.length) return 0;
-
-        const center = window.scrollY + window.innerHeight * 0.5;
-        let closestIndex = 0;
-        let closestDistance = Infinity;
-
-        sections.forEach(function (section, index) {
-            const sectionCenter = section.offsetTop + section.offsetHeight * 0.5;
-            const distance = Math.abs(sectionCenter - center);
-
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closestIndex = index;
-            }
-        });
-
-        return closestIndex;
-    }
-
-    function unlockSectionScroll() {
-        sectionScrollLocked = false;
-        unlockTimer = null;
-    }
-
-    function scrollToSection(index) {
-        if (!sections.length) return;
-
-        const safeIndex = Math.max(
-            0,
-            Math.min(index, sections.length - 1)
-        );
-
-        sectionScrollLocked = true;
-
-        sections[safeIndex].scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
-        /* Ignore all additional wheel events during the animation. */
-        window.clearTimeout(unlockTimer);
-        unlockTimer = window.setTimeout(
-            unlockSectionScroll,
-            1050
-        );
-    }
-
     if (sections.length > 1) {
-        window.addEventListener(
-            "wheel",
-            function (event) {
-                if (
-                    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-                ) {
-                    return;
+        let scrollTimer = null;
+        let lastWheelDirection = 0;
+        let gestureStartY = window.scrollY;
+        let gestureStartSection = 0;
+        let gestureActive = false;
+
+        function nearestSectionIndex() {
+            const y = window.scrollY;
+            let best = 0;
+            let distance = Infinity;
+
+            sections.forEach(function (section, index) {
+                const d = Math.abs(section.offsetTop - y);
+                if (d < distance) {
+                    distance = d;
+                    best = index;
                 }
+            });
 
-                /* Project carousel keeps ownership of wheel input. */
-                if (
-                    carouselReady &&
-                    viewport &&
-                    viewport.contains(event.target)
-                ) {
-                    return;
-                }
+            return best;
+        }
 
-                if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
-                    return;
-                }
+        function beginGesture(direction) {
+            if (!gestureActive) {
+                gestureActive = true;
+                gestureStartY = window.scrollY;
+                gestureStartSection = nearestSectionIndex();
+            }
 
-                /* Ignore tiny trackpad noise. */
-                if (Math.abs(event.deltaY) < 8) {
-                    return;
-                }
+            lastWheelDirection = direction;
+        }
 
-                /* A single gesture can only move one section. */
-                if (sectionScrollLocked) {
-                    event.preventDefault();
-                    return;
-                }
+        function finishGesture() {
+            if (!gestureActive) return;
 
-                const currentIndex = getCurrentSectionIndex();
-                const direction = event.deltaY > 0 ? 1 : -1;
-                const targetIndex = currentIndex + direction;
+            gestureActive = false;
 
-                if (
-                    targetIndex < 0 ||
-                    targetIndex >= sections.length
-                ) {
-                    return;
-                }
+            const moved = Math.abs(window.scrollY - gestureStartY);
+            const viewport = window.innerHeight || 800;
+            const smallGesture = moved < viewport * 0.45;
 
-                event.preventDefault();
-                scrollToSection(targetIndex);
-            },
-            { passive: false }
-        );
+            let targetIndex = nearestSectionIndex();
+
+            /*
+             * Small wheel movement: gently continue to the next/previous
+             * section. Large/fast movement: respect where the user actually
+             * scrolled and only settle to the nearest section.
+             *
+             * Nothing is prevented here. The browser remains fully in control
+             * of scrolling, so fast wheel/trackpad scrolling is never locked.
+             */
+            if (smallGesture && lastWheelDirection !== 0) {
+                targetIndex = Math.max(
+                    0,
+                    Math.min(
+                        sections.length - 1,
+                        gestureStartSection + lastWheelDirection
+                    )
+                );
+            }
+
+            sections[targetIndex].scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+
+        window.addEventListener("wheel", function (event) {
+            if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+
+            beginGesture(event.deltaY > 0 ? 1 : -1);
+
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(finishGesture, 140);
+            // IMPORTANT: no preventDefault(). Fast scrolling stays native.
+        }, { passive: true });
+
+        window.addEventListener("scroll", function () {
+            if (!gestureActive) return;
+
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(finishGesture, 140);
+        }, { passive: true });
     }
 
 })();

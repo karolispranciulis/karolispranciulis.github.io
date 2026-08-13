@@ -506,26 +506,28 @@
 
             <div class="file-list">
 
+
                 {% for file_path in page.files %}
 
-                    {% assign relative_file = file_path | remove_first: page.files_folder %}
+                    {% assign file_name = file_path | split: "/" | last %}
 
                     <button
                         type="button"
                         class="file-button {% if forloop.first %}active{% endif %}"
                         data-file-url="{{ file_path | relative_url }}"
-                        data-file-name="{{ relative_file }}"
+                        data-file-name="{{ file_name }}"
                     >
 
                         <span class="file-icon">
                             📄
                         </span>
 
-                        {{ relative_file }}
+                        {{ file_name }}
 
                     </button>
 
                 {% endfor %}
+
 
             </div>
 
@@ -607,9 +609,10 @@
     /*
      * File Explorer
      *
-     * The plugin document provides a small file manifest.
-     * This keeps the explorer reliable on GitHub Pages, while the
-     * browser fetches the actual source files from the deployed site.
+     * Jekyll generates the file list from everything
+     * inside the plugin's files/ directory.
+     *
+     * The browser then loads the actual file contents.
      */
 
 

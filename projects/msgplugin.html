@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MsgPlugin - Learning to Program</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f1117;
+            color: #e6e6e6;
+        }
+
+        header {
+            background: #151923;
+            padding: 40px 20px;
+            border-bottom: 1px solid #292e3b;
+        }
+
+        header, main {
+            text-align: left;
+        }
+
+        header h1 {
+            max-width: 900px;
+            margin: auto;
+            font-size: 36px;
+        }
+
+        header p {
+            max-width: 900px;
+            margin: 10px auto 0;
+            color: #9da5b4;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        a {
+            color: #8ea1ff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .box {
+            background: #181c26;
+            border: 1px solid #292e3b;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 10px;
+            margin-right: 6px;
+            background: #252a38;
+            border-radius: 6px;
+            color: #8ea1ff;
+            font-size: 14px;
+        }
+
+        pre {
+            background: #0b0d12;
+            border: 1px solid #292e3b;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+            color: #d6deff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #666d7a;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>📦 MsgPlugin</h1>
+    <p>My first Minecraft plugin project</p>
+</header>
+
+<main>
+
+    <p>
+        <a href="../index.html">← Back to Learning to Program</a>
+    </p>
+
+    <div class="box">
+        <h2>About this project</h2>
+
+        <p>
+            This is one of my Minecraft plugin projects while learning
+            Kotlin and Paper plugin development.
+        </p>
+
+        <span class="tag">Kotlin</span>
+        <span class="tag">Paper</span>
+        <span class="tag">Minecraft</span>
+    </div>
+
+    <div class="box">
+        <h2>What I learned</h2>
+
+        <ul>
+            <li>Kotlin classes</li>
+            <li>Kotlin functions</li>
+            <li>Creating a Minecraft plugin</li>
+            <li>Working with Paper</li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <h2>Important Code</h2>
+
+        <h3>Main.kt</h3>
+
+        <pre><code>class MsgPlugin : JavaPlugin() {
+
+    override fun onEnable() {
+        logger.info("MsgPlugin enabled!")
+    }
+}</code></pre>
+
+    </div>
+
+    <div class="box">
+        <h2>Things I want to improve</h2>
+
+        <ul>
+            <li>Add more commands</li>
+            <li>Learn event listeners</li>
+            <li>Learn how configuration files work</li>
+        </ul>
+    </div>
+
+</main>
+
+<footer>
+    Neklausk • Learning Kotlin & Minecraft Plugin Development
+</footer>
+
+</body>
+</html>

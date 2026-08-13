@@ -1,0 +1,42 @@
+name: Generate project code-viewer data
+
+# Runs automatically whenever you push updated project source files.
+# It regenerates _data/project_files/*.json from project-sources/*, commits
+# the result, and then GitHub Pages' normal Jekyll build picks it up.
+#
+# To wire up a new project, add a line to the matrix below with its
+# source folder and slug (the same slug used in that project's
+# `code_data:` front matter field).
+
+on:
+  push:
+    paths:
+      - "project-sources/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-project-json:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Generate project file trees
+        run: |
+          python3 tools/generate_project_tree.py project-sources/minecraft-plugin minecraft-plugin
+          # Add more lines here as you add more code-viewer-enabled projects:
+          # python3 tools/generate_project_tree.py project-sources/<folder> <slug>
+
+      - name: Commit generated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add _data/project_files/*.json
+          git diff --staged --quiet || git commit -m "Auto-update project code viewer data"
+          git push

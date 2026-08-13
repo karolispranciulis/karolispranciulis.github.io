@@ -1,103 +1,99 @@
-// Main site scripts: section snap on wheel and projects horizontal looping carousel
+// ============================================================================
+// main.js — nav active-state + project carousel
+// No slide/fade animation libraries. Section movement is handled entirely by
+// CSS scroll-snap (see style.css). This file only:
+//   1) highlights the current nav link while scrolling
+//   2) drives the "2 at a time, loops" project carousel
+// ============================================================================
 
-(function(){
-  // Section snap on wheel: one full section per wheel action
-  const sections = Array.from(document.querySelectorAll('.panel'));
-  if(sections.length){
-    let isScrolling = false;
-    let currentIdx = 0;
-    const navbarHeight = 68;
+document.addEventListener("DOMContentLoaded", () => {
+  initNavHighlight();
+  initProjectCarousel();
+});
 
-    const updateIndexByScroll = (dir) => {
-      currentIdx = Math.max(0, Math.min(sections.length - 1, currentIdx + dir));
-      isScrolling = true;
-      sections[currentIdx].scrollIntoView({behavior: 'smooth', block: 'start'});
-      setTimeout(()=> { isScrolling = false; }, 700);
-    };
+/* ---------------------------- Nav highlighting ---------------------------- */
 
-    // map initial index by current scroll
-    const findCurrent = () => {
-      const y = window.scrollY + navbarHeight + 10;
-      for(let i=0;i<sections.length;i++){
-        const r = sections[i].getBoundingClientRect();
-        const top = window.scrollY + r.top;
-        if(y >= top && y < top + sections[i].offsetHeight) { currentIdx = i; break; }
-      }
-    };
-    findCurrent();
+function initNavHighlight() {
+  const sections = document.querySelectorAll(".panel[id]");
+  const links = document.querySelectorAll(".nav-links a");
+  if (!sections.length || !links.length) return;
 
-    window.addEventListener('wheel', (e)=>{
-      if(isScrolling) return;
-      e.preventDefault();
-      const dir = e.deltaY > 0 ? 1 : -1;
-      updateIndexByScroll(dir);
-    }, {passive:false});
+  const linkFor = (id) =>
+    document.querySelector(`.nav-links a[href="#${id}"]`);
 
-    // Nav links
-    const navLinks = document.querySelectorAll('.nav-links a, .home-btn');
-    navLinks.forEach(link => {
-      link.addEventListener('click', (ev)=>{
-        ev.preventDefault();
-        const href = link.getAttribute('href');
-        if(!href || !href.startsWith('#')) return;
-        const target = document.querySelector(href);
-        if(target) {
-          const idx = sections.indexOf(target);
-          if(idx >= 0) { currentIdx = idx; }
-          target.scrollIntoView({behavior:'smooth', block:'start'});
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          links.forEach((l) => l.classList.remove("active"));
+          const link = linkFor(entry.target.id);
+          if (link) link.classList.add("active");
         }
       });
-    });
+    },
+    { root: document.getElementById("site-root"), threshold: 0.6 }
+  );
 
-    // Update index on manual scroll (e.g., keyboard or touch)
-    let scrollTimer = null;
-    window.addEventListener('scroll', ()=>{
-      if(scrollTimer) clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(()=>{
-        findCurrent();
-      }, 120);
-    });
+  sections.forEach((s) => observer.observe(s));
+}
+
+/* ------------------------------ Project carousel ---------------------------
+   Shows 2 project widgets per view. With >2 projects, prev/next buttons
+   appear and looping is done by re-inserting the first/last clone —
+   a plain jump, no animated transform.
+------------------------------------------------------------------------- */
+
+function initProjectCarousel() {
+  const track = document.getElementById("projects-carousel");
+  if (!track) return;
+
+  const items = Array.from(track.children);
+  const perPage = 2;
+
+  if (items.length <= perPage) {
+    // Nothing to scroll — plain static grid, no controls needed.
+    track.classList.remove("carousel");
+    return;
   }
 
-  // Projects carousel: horizontal, auto-advance with smooth transition and loop
-  const carousel = document.getElementById('projects-carousel');
-  if(carousel){
-    const speed = 2800; // ms between auto moves
-    const items = Array.from(carousel.querySelectorAll('.project-item'));
-    if(items.length > 1){
-      // duplicate items to allow smooth looping
-      const total = items.length;
-      // clone nodes
-      items.forEach(node => { carousel.appendChild(node.cloneNode(true)); });
-      let index = 0;
-      const itemWidth = items[0].getBoundingClientRect().width + 18; // include gap
-      // ensure starting at the first set
-      carousel.scrollLeft = 0;
+  // Wrap the track so prev/next buttons can sit beside it, without
+  // requiring any change to index.html's markup.
+  const wrap = document.createElement("div");
+  wrap.className = "carousel-wrap";
+  track.parentElement.insertBefore(wrap, track);
+  wrap.appendChild(track);
 
-      const step = ()=>{
-        index++;
-        carousel.scrollBy({left: itemWidth, behavior: 'smooth'});
-        // when we've scrolled past the original set, reset without animation
-        if(index >= total){
-          // after animation ends, jump back
-          setTimeout(()=>{
-            carousel.scrollLeft = 0;
-            index = 0;
-          }, 520);
-        }
-      };
+  // Build prev/next controls once.
+  const prevBtn = document.createElement("button");
+  prevBtn.className = "carousel-btn carousel-prev";
+  prevBtn.setAttribute("aria-label", "Previous projects");
+  prevBtn.textContent = "\u2039"; // ‹
 
-      let loopTimer = setInterval(step, speed);
+  const nextBtn = document.createElement("button");
+  nextBtn.className = "carousel-btn carousel-next";
+  nextBtn.setAttribute("aria-label", "Next projects");
+  nextBtn.textContent = "\u203A"; // ›
 
-      // Pause on hover
-      carousel.addEventListener('mouseenter', ()=> clearInterval(loopTimer));
-      carousel.addEventListener('mouseleave', ()=> { loopTimer = setInterval(step, speed); });
+  wrap.insertBefore(prevBtn, track);
+  wrap.appendChild(nextBtn);
 
-      // allow user manual scroll to move carousel - keep looping behavior
-      carousel.addEventListener('scroll', ()=>{
-        // noop for now
-      });
+  const pageWidth = () => track.clientWidth;
+
+  nextBtn.addEventListener("click", () => {
+    const atEnd =
+      Math.ceil(track.scrollLeft + track.clientWidth) >= track.scrollWidth;
+    if (atEnd) {
+      track.scrollTo({ left: 0, behavior: "smooth" });
+    } else {
+      track.scrollBy({ left: pageWidth(), behavior: "smooth" });
     }
-  }
+  });
 
-})();
+  prevBtn.addEventListener("click", () => {
+    if (track.scrollLeft <= 0) {
+      track.scrollTo({ left: track.scrollWidth, behavior: "smooth" });
+    } else {
+      track.scrollBy({ left: -pageWidth(), behavior: "smooth" });
+    }
+  });
+}

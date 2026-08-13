@@ -1,4 +1,13 @@
+# ==============================================================================
+# Skills — future-proof / easy to extend.
+#
+# To add a new skill: drop an image into /assets/img/skills/, then add one
+# entry below pointing to it. No HTML or CSS changes needed — index.html
+# loops over this file automatically ({% for skill in site.data.skills %}).
+# ==============================================================================
+
 - name: Kotlin
-  image: /assets/skills/kotlin.png
-  description: Primary language for JVM applications and plugin development. Used for software and Minecraft plugin projects.
-# To add a new skill later: add another block here and drop the PNG into /assets/skills/ (keep the image path)
+  image: /assets/img/skills/kotlin.png
+  description: >
+    My main language. I use it for backend logic, tooling, and my current
+    Minecraft plugin project (Paper/Spigot API).

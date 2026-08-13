@@ -1,0 +1,8 @@
+name: MsgPlugin
+version: 1.0.0
+main: dev.karolis.msgplugin.MsgPlugin
+api-version: "1.20"
+commands:
+  msg:
+    description: Send a private message to another player
+    usage: /msg <player> <message>

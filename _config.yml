@@ -1,0 +1,8 @@
+title: Karolis Pranciulis
+email: pranciuliskarolis@gmail.com
+github_username: karolispranciulis
+include: [".well-known"]
+
+collections:
+  projects:
+    output: true

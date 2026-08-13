@@ -1,98 +1,485 @@
 ---
 layout: null
 ---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Karolis Pranciulis | Programmer</title>
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Karolis Pranciulis | Programmer</title>
+
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
+
 <body>
-  {% include navigation.html %}
 
-  <main id="site-root">
-    <section id="home" class="panel hero-panel">
-      <div class="panel-inner hero-content">
-        <div class="eyebrow">PROGRAMMER · KOTLIN · MINECRAFT</div>
-        <h1 class="home-title">Karolis Pranciulis</h1>
-        <p class="lead">I build software, experiment with ideas, and enjoy turning technical problems into practical projects. I am especially interested in Kotlin, Minecraft plugin development, and learning how things work under the hood.</p>
-        <div class="hero-actions">
-          <a class="primary-button" href="#projects">View projects</a>
-          <a class="secondary-button" href="#contact">Get in touch</a>
-        </div>
-      </div>
-    </section>
+<header class="navbar">
 
-    <section id="skills" class="panel">
-      <div class="panel-inner">
-        <div class="eyebrow">WHAT I USE</div>
-        <h2>Skills</h2>
-        <p class="section-intro">Technologies I use to build, learn, and experiment with software.</p>
-        <div class="widget-grid">
-          {% for skill in site.data.skills %}
-          <div class="widget skill-widget">
-            <img src="{{ skill.image | relative_url }}" alt="{{ skill.name }}">
-            <div>
-              <h3>{{ skill.name }}</h3>
-              <p>{{ skill.description }}</p>
+    <a href="#home" class="logo">
+        karolis<span>pranciulis</span>
+    </a>
+
+    <nav class="nav-links">
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+</header>
+
+
+<main>
+
+    <!-- HOME -->
+
+    <section id="home" class="hero panel">
+
+        <div class="hero-content">
+
+            <div class="hero-eyebrow">
+                PROGRAMMER · KOTLIN · SOFTWARE
             </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </section>
 
-    <section id="projects" class="panel">
-      <div class="panel-inner">
-        <div class="eyebrow">SELECTED WORK</div>
-        <h2>Projects</h2>
-        <p class="section-intro">A look at the projects I am building and the code behind them.</p>
-        <div class="widget-grid">
-          {% for project in site.projects %}
-          <a href="{{ project.url | relative_url }}" class="widget project-widget">
-            <img src="{{ project.icon | relative_url }}" alt="{{ project.title }}">
-            <div class="project-copy">
-              <div class="project-type">PROJECT</div>
-              <h3>{{ project.title }}</h3>
-              <p>{{ project.short_description }}</p>
+            <h1>
+                Karolis<br>
+                <span>Pranciulis</span>
+            </h1>
+
+            <p class="hero-description">
+                I enjoy building software, learning how computers work,
+                and turning ideas into working projects.
+            </p>
+
+            <p class="hero-description secondary">
+                I mainly work with Kotlin and JVM technologies, with a
+                particular interest in Minecraft plugin development,
+                software development, and experimenting with new ideas.
+            </p>
+
+            <div class="hero-actions">
+                <a href="#projects" class="primary-button">
+                    View my projects
+                    <span>→</span>
+                </a>
+
+                <a href="#contact" class="secondary-button">
+                    Get in touch
+                </a>
             </div>
-            <span class="widget-arrow">↗</span>
-          </a>
-          {% endfor %}
+
         </div>
-      </div>
+
+        <div class="hero-decoration">
+            <div class="decoration-card">
+                <div class="decoration-dot"></div>
+                <div class="decoration-line large"></div>
+                <div class="decoration-line"></div>
+                <div class="decoration-line short"></div>
+            </div>
+        </div>
+
     </section>
 
-    <section id="about" class="panel">
-      <div class="panel-inner narrow-panel">
-        <div class="eyebrow">A LITTLE ABOUT ME</div>
-        <h2>About</h2>
-        <p>I'm 17 and I live in Kaunas, Lithuania. I enjoy programming, music, and spending time exploring technology.</p>
-        <p>I love computers — not just using them, but understanding how software works, trying new technologies, and building things from scratch.</p>
-        <p>Programming gives me a way to turn ideas into something real. I am always looking for a new concept to learn, a problem to solve, or a project that can teach me something useful.</p>
-      </div>
+
+    <!-- SKILLS -->
+
+    <section id="skills" class="panel content-panel">
+
+        <div class="section-container">
+
+            <div class="section-heading">
+
+                <div class="eyebrow">
+                    01 · SKILLS
+                </div>
+
+                <h2>
+                    Technologies I use
+                </h2>
+
+                <p>
+                    These are some of the technologies and tools I use
+                    while building projects and learning software development.
+                </p>
+
+            </div>
+
+
+            <div class="widget-grid">
+
+                {% for skill in site.data.skills %}
+
+                <div class="skill-widget">
+
+                    <div class="skill-icon">
+                        {{ skill.name | slice: 0, 1 }}
+                    </div>
+
+                    <div class="skill-content">
+
+                        <h3>
+                            {{ skill.name }}
+                        </h3>
+
+                        <p>
+                            {{ skill.description }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+                <div class="skill-widget">
+
+                    <div class="skill-icon">
+                        JVM
+                    </div>
+
+                    <div class="skill-content">
+
+                        <h3>
+                            JVM Development
+                        </h3>
+
+                        <p>
+                            Experience working with JVM-based software,
+                            libraries, APIs and project structures.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="skill-widget">
+
+                    <div class="skill-icon">
+                        MC
+                    </div>
+
+                    <div class="skill-content">
+
+                        <h3>
+                            Minecraft Plugins
+                        </h3>
+
+                        <p>
+                            Building Minecraft server plugins with Kotlin
+                            and Paper while learning more about APIs,
+                            events and server-side development.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="skill-widget">
+
+                    <div class="skill-icon">
+                        Git
+                    </div>
+
+                    <div class="skill-content">
+
+                        <h3>
+                            Git & GitHub
+                        </h3>
+
+                        <p>
+                            Using Git and GitHub to manage projects,
+                            experiment with code and keep development
+                            organized.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </section>
 
-    <section id="contact" class="panel">
-      <div class="panel-inner narrow-panel">
-        <div class="eyebrow">LET'S CONNECT</div>
-        <h2>Contact</h2>
-        <p>If you want to talk about programming, a project, or just technology in general, feel free to reach out.</p>
-        <div class="contact-icons">
-          <a class="contact-button" href="https://github.com/karolispranciulis" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .6a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.4-1.34-1.77-1.34-1.77-1.09-.75.08-.74.08-.74 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48.99.11-.77.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.17 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.29-1.23 3.29-1.23.65 1.65.24 2.87.12 3.17.77.84 1.23 1.91 1.23 3.22 0 4.62-2.81 5.64-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .6Z"/></svg>
-            <span>GitHub</span>
-          </a>
-          <a class="contact-button" href="mailto:pranciuliskarolis@gmail.com" aria-label="Email Karolis Pranciulis">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 5.5A2.5 2.5 0 0 1 5 3h14a2.5 2.5 0 0 1 2.5 2.5v13A2.5 2.5 0 0 1 19 21H5a2.5 2.5 0 0 1-2.5-2.5v-13Zm2.7-.5 6.8 5.2L18.8 5H5.2Zm14.3 2.4-6.58 5.03a1.5 1.5 0 0 1-1.84 0L4.5 7.4v10.6c0 .28.22.5.5.5h14c.28 0 .5-.22.5-.5V7.4Z"/></svg>
-            <span>Gmail</span>
-          </a>
+
+    <!-- PROJECTS -->
+
+    <section id="projects" class="panel content-panel">
+
+        <div class="section-container">
+
+            <div class="section-heading">
+
+                <div class="eyebrow">
+                    02 · PROJECTS
+                </div>
+
+                <h2>
+                    Things I've built
+                </h2>
+
+                <p>
+                    A collection of projects I've worked on while
+                    developing my programming skills.
+                </p>
+
+            </div>
+
+
+            <div class="project-grid">
+
+                {% for project in site.projects %}
+
+                <a
+                    href="{{ project.url | relative_url }}"
+                    class="large-project-card"
+                >
+
+                    <div class="project-card-header">
+
+                        <div class="project-card-icon">
+                            {% if project.icon %}
+                                <img
+                                    src="{{ project.icon | relative_url }}"
+                                    alt=""
+                                >
+                            {% else %}
+                                &lt;/&gt;
+                            {% endif %}
+                        </div>
+
+                        <span class="project-arrow">
+                            ↗
+                        </span>
+
+                    </div>
+
+                    <div class="project-card-label">
+                        PROJECT
+                    </div>
+
+                    <h3>
+                        {{ project.title }}
+                    </h3>
+
+                    <p>
+                        {{ project.short_description }}
+                    </p>
+
+                    <div class="project-card-footer">
+                        <span>Kotlin</span>
+                        <span>Minecraft</span>
+                        <span>Development</span>
+                    </div>
+
+                </a>
+
+                {% endfor %}
+
+            </div>
+
         </div>
-      </div>
+
     </section>
-  </main>
-  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+
+
+    <!-- ABOUT -->
+
+    <section id="about" class="panel content-panel">
+
+        <div class="section-container about-container">
+
+            <div class="section-heading">
+
+                <div class="eyebrow">
+                    03 · ABOUT
+                </div>
+
+                <h2>
+                    A little about me
+                </h2>
+
+            </div>
+
+
+            <div class="about-grid">
+
+                <div class="about-main">
+
+                    <p class="large-text">
+                        I'm a programmer from Kaunas, Lithuania.
+                        I enjoy spending my time learning about technology,
+                        programming and building things with computers.
+                    </p>
+
+                    <p>
+                        I love computers because there is always something
+                        new to discover. Whether it is understanding how
+                        software works, learning a new programming language,
+                        solving a problem or creating something completely
+                        new, there is always another challenge to explore.
+                    </p>
+
+                    <p>
+                        Programming is one of my main hobbies. I particularly
+                        enjoy working with Kotlin and JVM technologies,
+                        and Minecraft plugin development gives me a fun way
+                        to experiment with real software projects.
+                    </p>
+
+                </div>
+
+
+                <div class="about-facts">
+
+                    <div class="fact">
+                        <span>Location</span>
+                        <strong>Kaunas, Lithuania</strong>
+                    </div>
+
+                    <div class="fact">
+                        <span>Focus</span>
+                        <strong>Software Development</strong>
+                    </div>
+
+                    <div class="fact">
+                        <span>Language</span>
+                        <strong>Kotlin</strong>
+                    </div>
+
+                    <div class="fact">
+                        <span>Interests</span>
+                        <strong>Computers & Music</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CONTACT -->
+
+    <section id="contact" class="panel content-panel">
+
+        <div class="section-container contact-container">
+
+            <div class="section-heading">
+
+                <div class="eyebrow">
+                    04 · CONTACT
+                </div>
+
+                <h2>
+                    Let's connect
+                </h2>
+
+                <p>
+                    If you want to see my code, talk about programming,
+                    or just get in touch, you can find me here.
+                </p>
+
+            </div>
+
+
+            <div class="contact-grid">
+
+                <!-- GITHUB -->
+
+                <a
+                    href="https://github.com/karolispranciulis"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="contact-card"
+                >
+
+                    <div class="contact-icon github-icon">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <path
+                                fill="currentColor"
+                                d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.85 10.91.57.1.78-.25.78-.55v-2.12c-3.19.69-3.86-1.35-3.86-1.35-.52-1.32-1.28-1.67-1.28-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.03 1.75 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.73.81 1.18 1.84 1.18 3.1 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.08.78 2.18v3.23c0 .3.2.66.79.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
+                            />
+                        </svg>
+
+                    </div>
+
+                    <div>
+                        <span class="contact-label">
+                            GitHub
+                        </span>
+
+                        <strong>
+                            github.com/karolispranciulis
+                        </strong>
+                    </div>
+
+                    <span class="contact-arrow">
+                        ↗
+                    </span>
+
+                </a>
+
+
+                <!-- EMAIL -->
+
+                <a
+                    href="mailto:pranciuliskarolis@gmail.com"
+                    class="contact-card"
+                >
+
+                    <div class="contact-icon gmail-icon">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <path
+                                fill="currentColor"
+                                d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.5-.5a.5.5 0 0 0-.5.5v.25l8 5.55 8-5.55V5.5a.5.5 0 0 0-.5-.5h-15ZM20 8.18l-7.43 5.16a1 1 0 0 1-1.14 0L4 8.18v10.32c0 .28.22.5.5.5h15a.5.5 0 0 0 .5-.5V8.18Z"
+                            />
+                        </svg>
+
+                    </div>
+
+                    <div>
+                        <span class="contact-label">
+                            Email
+                        </span>
+
+                        <strong>
+                            pranciuliskarolis@gmail.com
+                        </strong>
+                    </div>
+
+                    <span class="contact-arrow">
+                        ↗
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+
 </body>
 </html>

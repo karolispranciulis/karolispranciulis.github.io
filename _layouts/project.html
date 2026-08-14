@@ -111,11 +111,12 @@
 
             {% for plugin in project_plugins %}
 
-
-            <a
-                href="{{ plugin.url | relative_url }}"
-                class="plugin-card"
-            >
+<a
+    href="{{ plugin.github }}"
+    class="plugin-card"
+    target="_blank"
+    rel="noopener noreferrer"
+>
 
                 <h2>
                     {{ plugin.title }}

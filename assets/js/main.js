@@ -10,17 +10,16 @@ if (sections.length > 1) {
     const nav = document.querySelector(".navbar");
 
     /*
-     * MOMENTUM_TIMEOUT: The gap (in ms) required between wheel events
-     * to consider it a "new" gesture. 60-100ms is the sweet spot.
+     * We speed up the animation to 400ms to feel snappy.
+     * We set the cooldown to exactly match it.
+     * The millisecond the animation is done, you can scroll again.
      */
-    const MOMENTUM_TIMEOUT = 60;
-    const ANIMATION_DURATION = 520; 
+    const ANIMATION_DURATION = 400; 
+    const WHEEL_COOLDOWN = 400;
 
     let targetIndex = 0; 
+    let lastScrollTime = 0;
     let animationFrame = null;
-    
-    let wheelLocked = false;
-    let momentumTimer = null;
 
     function getNavHeight() {
         return nav ? nav.getBoundingClientRect().height : 0;
@@ -40,7 +39,6 @@ if (sections.length > 1) {
         return Math.max(0, Math.min(sections.length - 1, index));
     }
 
-    // Only used for initial page load anchoring
     function getCurrentSection() {
         const marker = window.scrollY + getNavHeight() + 8;
         let closestIndex = 0;
@@ -72,7 +70,7 @@ if (sections.length > 1) {
 
     function animateToSection(index) {
         index = clampIndex(index);
-        targetIndex = index; // Lock in the destination immediately
+        targetIndex = index;
 
         const startY = window.scrollY;
         const endY = getSectionTop(index);
@@ -106,11 +104,8 @@ if (sections.length > 1) {
 
     function handleWheel(event) {
         if (event.ctrlKey) return;
-
-        // Ignore horizontal scrolling
         if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
 
-        // Don't interfere with native scrolling areas
         const scrollableElement = event.target.closest(
             [
                 ".editor-content",
@@ -126,26 +121,22 @@ if (sections.length > 1) {
 
         event.preventDefault();
 
-        // 1. Clear the timer every time the hardware fires a wheel event
-        clearTimeout(momentumTimer);
+        const now = Date.now();
 
-        // 2. Set a timer to unlock scrolling once events pause for 60ms
-        momentumTimer = setTimeout(function () {
-            wheelLocked = false;
-        }, MOMENTUM_TIMEOUT);
-
-        // 3. If we are currently locked (still processing a single gesture), ignore
-        if (wheelLocked) {
-            return; 
+        // -------------------------------------------------
+        // STRICT THROTTLE (NO RESETTING)
+        // -------------------------------------------------
+        // If we are within the 400ms window, ignore the hardware's 
+        // leftover momentum entirely.
+        if (now - lastScrollTime < WHEEL_COOLDOWN) {
+            return;
         }
-
-        // 4. This is a new gesture! Lock it and calculate the next section
-        wheelLocked = true;
 
         const direction = event.deltaY > 0 ? 1 : -1;
         const nextIndex = clampIndex(targetIndex + direction);
 
         if (nextIndex !== targetIndex) {
+            lastScrollTime = now; // Lock the timestamp
             animateToSection(nextIndex);
         }
     }
@@ -165,10 +156,7 @@ if (sections.length > 1) {
             if (index === -1) return;
 
             event.preventDefault();
-            
-            // Reset locks
-            clearTimeout(momentumTimer);
-            wheelLocked = false;
+            lastScrollTime = Date.now(); 
 
             animateToSection(index);
             history.replaceState(null, "", "#" + id);
@@ -203,33 +191,25 @@ if (sections.length > 1) {
 
         if (direction !== 0) {
             event.preventDefault();
-            clearTimeout(momentumTimer);
-            wheelLocked = false;
+            lastScrollTime = Date.now();
             animateToSection(targetIndex + direction);
             return;
         }
 
         if (event.key === "Home") {
             event.preventDefault();
-            clearTimeout(momentumTimer);
-            wheelLocked = false;
+            lastScrollTime = Date.now();
             animateToSection(0);
             return;
         }
 
         if (event.key === "End") {
             event.preventDefault();
-            clearTimeout(momentumTimer);
-            wheelLocked = false;
+            lastScrollTime = Date.now();
             animateToSection(sections.length - 1);
         }
     });
 
-    /*
-     * -----------------------------------------------------
-     * INITIAL HASH
-     * -----------------------------------------------------
-     */
     if (window.location.hash) {
         const id = window.location.hash.slice(1);
         const index = sections.findIndex(section => section.id === id);
@@ -237,7 +217,7 @@ if (sections.length > 1) {
         if (index >= 0) {
             requestAnimationFrame(function () {
                 window.scrollTo(0, getSectionTop(index));
-                targetIndex = index; // Synchronize target
+                targetIndex = index;
             });
         } else {
             targetIndex = getCurrentSection();

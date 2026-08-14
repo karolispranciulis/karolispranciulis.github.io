@@ -106,17 +106,6 @@ if (sections.length > 1) {
         if (event.ctrlKey) return;
         if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
 
-        const scrollableElement = event.target.closest(
-            [
-                ".editor-content",
-                ".ide-explorer",
-                "textarea",
-                "input",
-                "select",
-                "[data-native-scroll]"
-            ].join(",")
-        );
-
         if (scrollableElement) return;
 
         event.preventDefault();

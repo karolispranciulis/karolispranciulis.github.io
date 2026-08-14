@@ -15,7 +15,7 @@ if (sections.length > 1) {
      * The millisecond the animation is done, you can scroll again.
      */
     const ANIMATION_DURATION = 400; 
-    const WHEEL_COOLDOWN = 400;
+    const WHEEL_COOLDOWN = 500;
 
     let targetIndex = 0; 
     let lastScrollTime = 0;

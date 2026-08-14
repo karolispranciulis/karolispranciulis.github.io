@@ -715,35 +715,92 @@ a {
     gap: 18px;
 }
 
+/* =====================================================
+   PLUGIN WIDGET
+   ===================================================== */
+
 .plugin-card {
-    min-height: 150px;
-    padding: 24px;
+    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    background: rgba(12,27,43,.75);
-    transition: transform .2s ease, border-color .2s ease;
+    justify-content: center;
+
+    min-height: 170px;
+    height: 170px;
+
+    padding: 28px 32px;
+
+    border: 1px solid var(--border-color, #1e3a56);
+    border-radius: 20px;
+
+    background: rgba(10, 28, 44, 0.72);
+
+    text-decoration: none;
+    color: inherit;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+
+    overflow: hidden;
 }
 
-.plugin-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--border-hover);
+/* Plugin name */
+.plugin-card h3,
+.plugin-card .plugin-name {
+    margin: 0 0 10px;
+
+    font-size: 30px;
+    line-height: 1.15;
+    font-weight: 750;
+    letter-spacing: -0.5px;
+
+    color: #f5f8fc;
 }
 
-.plugin-card h2 {
-    margin: 0 0 9px;
-    font-size: clamp(1.15rem, 1.7vw, 1.45rem);
-    line-height: 1.2;
-    white-space: nowrap;
-}
-
-.plugin-card p {
+/* Description */
+.plugin-card p,
+.plugin-card .plugin-description {
     margin: 0;
-    color: var(--muted);
-    font-size: .92rem;
-    line-height: 1.55;
+
+    font-size: 17px;
+    line-height: 1.5;
+
+    color: #8fa9c2;
+    max-width: 600px;
+}
+
+/* Hover */
+.plugin-card:hover {
+    transform: translateY(-3px);
+
+    border-color: #2c6fa5;
+
+    background: rgba(13, 35, 54, 0.9);
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.18);
+}
+
+/* Keep it compact on smaller screens */
+@media (max-width: 700px) {
+    .plugin-card {
+        min-height: 145px;
+        height: 145px;
+        padding: 24px;
+    }
+
+    .plugin-card h3,
+    .plugin-card .plugin-name {
+        font-size: 25px;
+    }
+
+    .plugin-card p,
+    .plugin-card .plugin-description {
+        font-size: 15px;
+    }
 }
 
 .plugin-tags {

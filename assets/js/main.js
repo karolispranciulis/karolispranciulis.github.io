@@ -68,16 +68,7 @@ if (sections.length > 1) {
         }
     }
 
-   const scrollableElement = event.target.closest(
-    [
-        ".editor-content",
-        ".ide-explorer",
-        "textarea",
-        "input",
-        "select",
-        "[data-native-scroll]"
-    ].join(",")
-);
+
     function animateToSection(index) {
         index = clampIndex(index);
         targetIndex = index;
@@ -112,33 +103,36 @@ if (sections.length > 1) {
         animationFrame = requestAnimationFrame(animate);
     }
 
-    function handleWheel(event) {
-        if (event.ctrlKey) return;
-        if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+  function handleWheel(event) {
+    if (event.ctrlKey) return;
+    if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
 
-        if (scrollableElement) return;
+    const scrollableElement = event.target.closest(
+        [
+            "textarea",
+            "input",
+            "select"
+        ].join(",")
+    );
 
-        event.preventDefault();
+    if (scrollableElement) return;
 
-        const now = Date.now();
+    event.preventDefault();
 
-        // -------------------------------------------------
-        // STRICT THROTTLE (NO RESETTING)
-        // -------------------------------------------------
-        // If we are within the 400ms window, ignore the hardware's 
-        // leftover momentum entirely.
-        if (now - lastScrollTime < WHEEL_COOLDOWN) {
-            return;
-        }
+    const now = Date.now();
 
-        const direction = event.deltaY > 0 ? 1 : -1;
-        const nextIndex = clampIndex(targetIndex + direction);
-
-        if (nextIndex !== targetIndex) {
-            lastScrollTime = now; // Lock the timestamp
-            animateToSection(nextIndex);
-        }
+    if (now - lastScrollTime < WHEEL_COOLDOWN) {
+        return;
     }
+
+    const direction = event.deltaY > 0 ? 1 : -1;
+    const nextIndex = clampIndex(targetIndex + direction);
+
+    if (nextIndex !== targetIndex) {
+        lastScrollTime = now;
+        animateToSection(nextIndex);
+    }
+}
 
     window.addEventListener("wheel", handleWheel, { passive: false });
 

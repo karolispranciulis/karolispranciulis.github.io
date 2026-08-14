@@ -44,7 +44,16 @@ jobs:
 
               lines.append(f"{plugin_dir.name}:")
               for file in sorted(p for p in files_dir.rglob("*") if p.is_file()):
-                  lines.append(f"  - {file.as_posix()}")
+                  relative = file.relative_to(files_dir).as_posix()
+                  # Keep the displayed path relative to the hidden `files/` root.
+                  # Keep the fetch URL explicit so Liquid cannot accidentally
+                  # display or reconstruct the repository folders.
+                  def yaml_quote(value):
+                      return "'" + value.replace("'", "''") + "'"
+
+                  lines.append("  - path: " + yaml_quote(relative))
+                  lines.append("    url: " + yaml_quote("/" + file.as_posix()))
+
 
           Path("_data/plugin_files.yml").write_text("\n".join(lines) + "\n", encoding="utf-8")
           PY
@@ -54,6 +63,14 @@ jobs:
         with:
           source: ./
           destination: ./_site
+
+      - name: Ensure plugin source files are included
+        shell: bash
+        run: |
+          if [ -d "plugins" ]; then
+            mkdir -p _site/plugins
+            cp -R plugins/. _site/plugins/
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4

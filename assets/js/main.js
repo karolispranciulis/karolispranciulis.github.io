@@ -252,85 +252,199 @@
     ===================================================== */
 
     /*
-     * The home page is made of full-screen sections. A wheel/trackpad
-     * movement moves exactly one section in that direction. There is
-     * intentionally NO cooldown and NO animation lock: another wheel
-     * event can immediately request the next section while the current
-     * smooth animation is still running.
+     * One wheel gesture = one section.
+     *
+     * There is deliberately NO time cooldown and no animation lock.
+     * Instead, a gesture is defined by a short period of wheel inactivity.
+     * A strong mouse-wheel tick or a large trackpad delta still produces
+     * only one section move, while a completely new gesture can immediately
+     * move again. This prevents accidental multi-section skipping without
+     * making the page feel locked.
      */
-    const sectionList = Array.from(
+    const sections = Array.from(
         document.querySelectorAll("main#site-root > section[id]")
     );
 
-    if (sectionList.length > 0) {
-        let targetSection = 0;
+    if (sections.length) {
+        const nav = document.querySelector(".navbar");
+        const gestureGap = 110;
+        const scrollDuration = 650;
 
-        function getClosestSection() {
-            const scrollPosition = window.scrollY + 80;
-            let closest = 0;
+        let currentIndex = 0;
+        let gestureTimer = null;
+        let gestureActive = false;
+        let lastDirection = 0;
+        let animationFrame = null;
+
+        function navOffset() {
+            return nav ? nav.getBoundingClientRect().height : 0;
+        }
+
+        function sectionY(index) {
+            const section = sections[index];
+            return Math.max(
+                0,
+                section.getBoundingClientRect().top + window.scrollY - navOffset()
+            );
+        }
+
+        function nearestIndex() {
+            const marker = window.scrollY + navOffset() + 2;
+            let best = 0;
             let distance = Infinity;
 
-            sectionList.forEach(function (section, index) {
-                const currentDistance = Math.abs(section.offsetTop - scrollPosition);
-                if (currentDistance < distance) {
-                    distance = currentDistance;
-                    closest = index;
+            sections.forEach(function (section, index) {
+                const d = Math.abs(
+                    section.getBoundingClientRect().top + window.scrollY - marker
+                );
+                if (d < distance) {
+                    distance = d;
+                    best = index;
                 }
             });
 
-            return closest;
+            return best;
         }
 
-        targetSection = getClosestSection();
+        function easeInOutCubic(t) {
+            return t < 0.5
+                ? 4 * t * t * t
+                : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
 
-        /* Keep the virtual target in sync when the user uses an
-           anchor, scrollbar, keyboard, or another non-wheel method. */
+        function animateTo(index) {
+            const target = Math.max(0, Math.min(sections.length - 1, index));
+            const start = window.scrollY;
+            const end = sectionY(target);
+            const distance = end - start;
+
+            currentIndex = target;
+
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+                animationFrame = null;
+            }
+
+            if (Math.abs(distance) < 1) {
+                window.scrollTo(0, end);
+                return;
+            }
+
+            const started = performance.now();
+
+            function frame(now) {
+                const progress = Math.min(1, (now - started) / scrollDuration);
+                const eased = easeInOutCubic(progress);
+
+                window.scrollTo(0, start + distance * eased);
+
+                if (progress < 1) {
+                    animationFrame = requestAnimationFrame(frame);
+                } else {
+                    animationFrame = null;
+                }
+            }
+
+            animationFrame = requestAnimationFrame(frame);
+        }
+
+        function beginGesture(direction) {
+            /* Repeated wheel events belonging to the same physical gesture
+               must NOT stack multiple section jumps. There is no time-based
+               animation cooldown: the latch only waits for the wheel burst
+               to end. A direction reversal is accepted immediately. */
+            if (gestureActive && direction === lastDirection) {
+                clearTimeout(gestureTimer);
+                gestureTimer = setTimeout(endGesture, gestureGap);
+                return;
+            }
+
+            currentIndex = nearestIndex();
+            gestureActive = true;
+            lastDirection = direction;
+
+            const next = Math.max(
+                0,
+                Math.min(sections.length - 1, currentIndex + direction)
+            );
+
+            if (next !== currentIndex) {
+                animateTo(next);
+            }
+
+            clearTimeout(gestureTimer);
+            gestureTimer = setTimeout(endGesture, gestureGap);
+        }
+
+        function endGesture() {
+            gestureActive = false;
+            lastDirection = 0;
+            currentIndex = nearestIndex();
+            gestureTimer = null;
+        }
+
+        /* Only the homepage wheel is handled. IDE/project pages are untouched. */
+        window.addEventListener("wheel", function (event) {
+            if (event.ctrlKey) return;
+            if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+            if (!sections.length) return;
+
+            event.preventDefault();
+            beginGesture(event.deltaY > 0 ? 1 : -1);
+        }, { passive: false });
+
+        /* Explicit anchor navigation is always smooth. */
         document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-            link.addEventListener("click", function () {
+            link.addEventListener("click", function (event) {
                 const id = link.getAttribute("href").slice(1);
-                const index = sectionList.findIndex(function (section) {
+                const index = sections.findIndex(function (section) {
                     return section.id === id;
                 });
 
-                if (index !== -1) {
-                    targetSection = index;
-                }
+                if (index === -1) return;
+
+                event.preventDefault();
+                gestureActive = false;
+                clearTimeout(gestureTimer);
+                currentIndex = index;
+                animateTo(index);
+                history.replaceState(null, "", "#" + id);
             });
         });
 
-        let syncTimer = null;
-        window.addEventListener("scroll", function () {
-            clearTimeout(syncTimer);
-            syncTimer = setTimeout(function () {
-                targetSection = getClosestSection();
-            }, 120);
-        }, { passive: true });
+        /* Keyboard navigation remains natural and predictable. */
+        window.addEventListener("keydown", function (event) {
+            if (event.defaultPrevented) return;
 
-        window.addEventListener("wheel", function (event) {
-            if (Math.abs(event.deltaY) < 1) return;
+            if (event.key === "PageDown" || event.key === "ArrowDown") {
+                event.preventDefault();
+                beginGesture(1);
+            } else if (event.key === "PageUp" || event.key === "ArrowUp") {
+                event.preventDefault();
+                beginGesture(-1);
+            } else if (event.key === "Home") {
+                event.preventDefault();
+                animateTo(0);
+            } else if (event.key === "End") {
+                event.preventDefault();
+                animateTo(sections.length - 1);
+            }
+        });
 
-            /* Let horizontal gestures belong to the horizontal project
-               carousel/trackpad instead of changing page sections. */
-            if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
-
-            const direction = event.deltaY > 0 ? 1 : -1;
-            const nextSection = Math.max(
-                0,
-                Math.min(sectionList.length - 1, targetSection + direction)
-            );
-
-            if (nextSection === targetSection) return;
-
-            /* This event is the section-navigation gesture itself.
-               We do not wait for an animation or start a cooldown. */
-            event.preventDefault();
-            targetSection = nextSection;
-
-            sectionList[targetSection].scrollIntoView({
-                behavior: "smooth",
-                block: "start"
+        if (window.location.hash) {
+            const id = window.location.hash.slice(1);
+            const index = sections.findIndex(function (section) {
+                return section.id === id;
             });
-        }, { passive: false });
+            if (index >= 0) {
+                currentIndex = index;
+                requestAnimationFrame(function () {
+                    window.scrollTo(0, sectionY(index));
+                });
+            }
+        } else {
+            currentIndex = nearestIndex();
+        }
     }
 
 })();

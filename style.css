@@ -19,9 +19,9 @@
 }
 
 html {
-    /* Smooth animated scrolling without intercepting wheel input.
+    /* Smooth section navigation is handled by the homepage script.
        Users can still scroll as fast/far as they want. */
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     scroll-padding-top: 76px;
     background: var(--bg);
 }

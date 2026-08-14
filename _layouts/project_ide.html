@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{{ page.title }} | IDE</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+
+            margin: 0;
+
+            overflow: hidden;
+
+            background: #07101a;
+
+            color: #dce8f3;
+
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+
+
+        /* =========================
+           IDE
+        ========================= */
+
+        .ide {
+            width: 100%;
+            height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* =========================
+           TOP BAR
+        ========================= */
+
+        .ide-topbar {
+            height: 58px;
+
+            flex: 0 0 58px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 25px;
+
+            padding: 0 20px;
+
+            border-bottom: 1px solid #1d3348;
+
+            background: #0a1725;
+        }
+
+
+        .ide-back {
+            color: #8ea8bd;
+
+            text-decoration: none;
+
+            font-size: 0.85rem;
+
+            white-space: nowrap;
+        }
+
+
+        .ide-back:hover {
+            color: #6dc1ff;
+        }
+
+
+        .ide-title {
+            overflow: hidden;
+
+            color: #dce8f3;
+
+            font-size: 0.9rem;
+
+            font-weight: 700;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+        }
+
+
+        .ide-title span {
+            color: #6dbdff;
+        }
+
+
+        /* =========================
+           MAIN IDE AREA
+        ========================= */
+
+        .ide-body {
+            min-width: 0;
+            min-height: 0;
+
+            flex: 1;
+
+            display: flex;
+        }
+
+
+        /* =========================
+           EXPLORER
+        ========================= */
+
+        .ide-explorer {
+            width: 290px;
+
+            flex: 0 0 290px;
+
+            min-height: 0;
+
+            overflow-y: auto;
+
+            border-right: 1px solid #1d3348;
+
+            background: #091522;
+        }
+
+
+        .explorer-title {
+            padding: 18px 20px 10px;
+
+            color: #7891a7;
+
+            font-size: 0.7rem;
+
+            font-weight: 800;
+
+            letter-spacing: 0.12em;
+        }
+
+
+        .explorer-project {
+            padding: 0 20px 16px;
+
+            color: #dbe8f3;
+
+            font-size: 0.82rem;
+
+            font-weight: 700;
+        }
+
+
+
+
+
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 8px;
+        }
+
+
+        .folder-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 20px 7px;
+            color: #c9d8e6;
+            font-size: 0.8rem;
+            font-weight: 650;
+        }
+
+
+        .folder-icon {
+            width: 18px;
+            flex: 0 0 18px;
+        }
+
+
+        .file-button {
+            width: 100%;
+
+            display: block;
+
+            padding: 9px 20px 9px 48px;
+
+            border: 0;
+
+            border-left: 2px solid transparent;
+
+            background: transparent;
+
+            color: #8fa6ba;
+
+            text-align: left;
+
+            font-family: inherit;
+
+            font-size: 0.8rem;
+
+            cursor: pointer;
+
+            transition:
+                background 0.15s ease,
+                color 0.15s ease,
+                border-color 0.15s ease;
+        }
+
+
+        .file-button:hover {
+            background: #0d2032;
+
+            color: #dce8f3;
+        }
+
+
+        .file-button.active {
+            border-left-color: #5db9ff;
+
+            background: #10283d;
+
+            color: #ffffff;
+        }
+
+
+        .file-icon {
+            display: inline-block;
+
+            width: 22px;
+
+            color: #6da9d4;
+        }
+
+
+        /* =========================
+           EDITOR
+        ========================= */
+
+        .ide-editor {
+            min-width: 0;
+            min-height: 0;
+
+            flex: 1;
+
+            display: flex;
+            flex-direction: column;
+
+            background: #07111c;
+        }
+
+
+        .plugin-info {
+            flex: 0 0 auto;
+
+            padding: 20px 28px;
+
+            border-bottom: 1px solid #1b2c3d;
+
+            background: #091724;
+        }
+
+
+        .plugin-info h1 {
+            margin: 0 0 6px;
+
+            color: #ffffff;
+
+            font-size: 1.25rem;
+        }
+
+
+        .plugin-info p {
+            max-width: 900px;
+
+            margin: 0;
+
+            color: #8198ab;
+
+            font-size: 0.84rem;
+
+            line-height: 1.5;
+        }
+
+
+        .editor-tab {
+            height: 44px;
+
+            flex: 0 0 44px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 20px;
+
+            border-bottom: 1px solid #1b2c3d;
+
+            color: #cbd9e5;
+
+            background: #0a1724;
+
+            font-family:
+                "JetBrains Mono",
+                "Cascadia Code",
+                Consolas,
+                monospace;
+
+            font-size: 0.78rem;
+        }
+
+
+        .editor-content {
+            min-width: 0;
+            min-height: 0;
+
+            flex: 1;
+
+            overflow: auto;
+
+            padding: 24px 0;
+        }
+
+
+        .code-container {
+            min-width: max-content;
+
+            display: flex;
+        }
+
+
+        .line-numbers {
+            width: 60px;
+
+            flex: 0 0 60px;
+
+            padding-right: 18px;
+
+            color: #43586b;
+
+            text-align: right;
+
+            user-select: none;
+
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+
+            font-family:
+                "JetBrains Mono",
+                "Cascadia Code",
+                Consolas,
+                monospace;
+
+            font-size: 13px;
+
+            line-height: 1.75;
+        }
+
+
+        .line-number {
+            display: block;
+            height: calc(13px * 1.75);
+            line-height: 1.75;
+            white-space: nowrap;
+        }
+
+
+        .code {
+            margin: 0;
+
+            padding: 0 30px 0 0;
+
+            color: #cbd8e5;
+
+            font-family:
+                "JetBrains Mono",
+                "Cascadia Code",
+                Consolas,
+                monospace;
+
+            font-size: 13px;
+
+            line-height: 1.75;
+
+            white-space: pre;
+        }
+
+
+        .empty-editor {
+            padding: 50px;
+
+            color: #61788b;
+
+            font-size: 0.9rem;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .ide-explorer {
+                width: 220px;
+
+                flex-basis: 220px;
+            }
+
+
+            .ide-topbar {
+                gap: 12px;
+
+                padding: 0 12px;
+            }
+
+
+            .ide-back {
+                font-size: 0.75rem;
+            }
+
+
+            .ide-title {
+                font-size: 0.78rem;
+            }
+
+
+            .plugin-info {
+                padding: 16px 18px;
+            }
+
+
+            .code {
+                padding-right: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="ide">
+
+
+    <!-- =========================
+         TOP BAR
+    ========================= -->
+
+    <header class="ide-topbar">
+
+        <a
+            class="ide-back"
+            href="{{ '/projects/minecraft-plugin-development-kotlin/' | relative_url }}"
+        >
+            ← Minecraft Plugin Development
+        </a>
+
+
+        <div class="ide-title">
+
+            Plugin:
+
+            <span>
+                {{ page.title }}
+            </span>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================
+         IDE BODY
+    ========================= -->
+
+    <div class="ide-body">
+
+
+        <!-- =========================
+             FILE EXPLORER
+        ========================= -->
+
+        <aside class="ide-explorer">
+
+
+            <div class="explorer-title">
+                EXPLORER
+            </div>
+
+
+            <div class="explorer-project">
+                {{ page.title }}
+            </div>
+
+
+            <div class="file-list" id="file-list">
+
+                {% assign generated_files = site.data.plugin_files[page.title] %}
+
+                {% for file in generated_files %}
+                    <div
+                        class="file-manifest-item"
+                        data-file-url="{{ file.url | relative_url | escape }}"
+                        data-file-path="{{ file.path | escape }}"
+                    ></div>
+                {% endfor %}
+
+            </div>
+
+
+        </aside>
+
+
+
+        <!-- =========================
+             EDITOR
+        ========================= -->
+
+        <main class="ide-editor">
+
+
+            <div class="plugin-info">
+
+                <h1>
+                    {{ page.title }}
+                </h1>
+
+
+                <p>
+                    {{ page.description }}
+                </p>
+
+            </div>
+
+
+            <div class="editor-tab" id="editor-tab">
+                Select a file
+            </div>
+
+
+            <div class="editor-content">
+
+                <div
+                    class="empty-editor"
+                    id="empty-editor"
+                >
+                    Select a file from the Explorer.
+                </div>
+
+
+                <div
+                    class="code-container"
+                    id="code-container"
+                    style="display: none;"
+                >
+
+                    <div
+                        class="line-numbers"
+                        id="line-numbers"
+                    ></div>
+
+
+                    <pre
+                        class="code"
+                        id="code"
+                    ></pre>
+
+                </div>
+
+            </div>
+
+
+        </main>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+    /*
+     * File Explorer
+     *
+     * The root `files/` directory is intentionally hidden from the UI.
+     * Its contents become the top level. Nested directories are rendered
+     * as real folders, with their files indented underneath them.
+     */
+
+    const fileList = document.getElementById("file-list");
+    const manifestItems = Array.from(
+        document.querySelectorAll(".file-manifest-item")
+    );
+
+    const tab = document.getElementById("editor-tab");
+    const code = document.getElementById("code");
+    const lineNumbers = document.getElementById("line-numbers");
+    const codeContainer = document.getElementById("code-container");
+    const emptyEditor = document.getElementById("empty-editor");
+
+    function createTree(items) {
+        const root = { folders: new Map(), files: [] };
+
+        items.forEach(function (item) {
+            const path = item.dataset.filePath || "";
+            const parts = path.split("/").filter(Boolean);
+            if (!parts.length) return;
+
+            let node = root;
+
+            parts.slice(0, -1).forEach(function (folderName) {
+                if (!node.folders.has(folderName)) {
+                    node.folders.set(folderName, {
+                        folders: new Map(),
+                        files: []
+                    });
+                }
+                node = node.folders.get(folderName);
+            });
+
+            node.files.push({
+                name: parts[parts.length - 1],
+                url: item.dataset.fileUrl
+            });
+        });
+
+        return root;
+    }
+
+    function createFolderRow(name, depth) {
+        const row = document.createElement("div");
+        row.className = "folder-row";
+        row.style.paddingLeft = (20 + depth * 18) + "px";
+
+        const icon = document.createElement("span");
+        icon.className = "folder-icon";
+        icon.textContent = "📁";
+
+        const label = document.createElement("span");
+        label.textContent = name;
+
+        row.append(icon, label);
+        return row;
+    }
+
+    function createFileButton(file, depth) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "file-button";
+        button.dataset.fileUrl = file.url;
+        button.dataset.fileName = file.name;
+        button.style.paddingLeft = (48 + depth * 18) + "px";
+
+        const icon = document.createElement("span");
+        icon.className = "file-icon";
+        icon.textContent = "📄";
+
+        button.append(icon, document.createTextNode(file.name));
+        return button;
+    }
+
+    function renderTree(node, depth) {
+        const fragment = document.createDocumentFragment();
+
+        Array.from(node.folders.keys())
+            .sort(function (a, b) { return a.localeCompare(b); })
+            .forEach(function (folderName) {
+                fragment.appendChild(createFolderRow(folderName, depth));
+                fragment.appendChild(
+                    renderTree(node.folders.get(folderName), depth + 1)
+                );
+            });
+
+        node.files
+            .sort(function (a, b) { return a.name.localeCompare(b.name); })
+            .forEach(function (file) {
+                fragment.appendChild(createFileButton(file, depth));
+            });
+
+        return fragment;
+    }
+
+    function loadFile(button) {
+        const url = button.dataset.fileUrl;
+        const name = button.dataset.fileName;
+
+        tab.textContent = name;
+
+        document.querySelectorAll(".file-button").forEach(function (item) {
+            item.classList.remove("active");
+        });
+
+        button.classList.add("active");
+        emptyEditor.style.display = "none";
+        codeContainer.style.display = "flex";
+        code.textContent = "Loading...";
+        lineNumbers.textContent = "";
+
+        fetch(url)
+            .then(function (response) {
+                if (!response.ok) throw new Error("Could not load file");
+                return response.text();
+            })
+            .then(function (text) {
+                code.textContent = text;
+
+                const lines = text.split("\n");
+                lineNumbers.innerHTML = "";
+
+                lines.forEach(function (_, index) {
+                    const number = document.createElement("span");
+                    number.className = "line-number";
+                    number.textContent = String(index + 1);
+                    lineNumbers.appendChild(number);
+                });
+            })
+            .catch(function (error) {
+                code.textContent =
+                    "Unable to load this file.\n\n" + error.message;
+            });
+    }
+
+    const tree = createTree(manifestItems);
+
+    manifestItems.forEach(function (item) {
+        item.remove();
+    });
+
+    fileList.appendChild(renderTree(tree, 0));
+
+    fileList.addEventListener("click", function (event) {
+        const button = event.target.closest(".file-button");
+        if (button) loadFile(button);
+    });
+
+    const firstButton = fileList.querySelector(".file-button");
+    if (firstButton) loadFile(firstButton);
+</script>
+
+
+</body>
+
+</html>

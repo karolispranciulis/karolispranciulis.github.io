@@ -1,0 +1,14 @@
+- name: Kotlin
+  description: >
+    My primary programming language for JVM development and
+    Minecraft plugin development.
+
+- name: Git
+  description: >
+    Version control and GitHub for managing projects and
+    keeping development organized.
+
+- name: Java / JVM
+  description: >
+    Familiarity with the JVM ecosystem, libraries, APIs and
+    software built around Java and Kotlin.

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {{ page.title }} | Karolis Pranciulis
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="navbar">
+
+
+    <a
+        href="{{ '/' | relative_url }}"
+        class="home-btn"
+    >
+        xao3
+    </a>
+
+
+    <nav class="nav-links">
+
+        <a href="{{ '/' | relative_url }}#skills">
+            Skills
+        </a>
+
+        <a href="{{ '/' | relative_url }}#projects">
+            Projects
+        </a>
+
+        <a href="{{ '/' | relative_url }}#about">
+            About
+        </a>
+
+        <a href="{{ '/' | relative_url }}#contact">
+            Contact
+        </a>
+
+    </nav>
+
+
+</header>
+
+
+
+<main class="page">
+
+
+    <div class="page-container">
+
+
+        <a
+            href="{{ '/' | relative_url }}#projects"
+            class="back-link"
+        >
+            ← Back to projects
+        </a>
+
+
+        <div class="eyebrow">
+            PROJECT
+        </div>
+
+
+        <h1 class="page-title">
+            {{ page.title }}
+        </h1>
+
+
+        <p class="page-description">
+            {{ page.short_description }}
+        </p>
+
+
+        <div
+            class="eyebrow"
+            style="margin-bottom: 18px;"
+        >
+            PLUGINS
+        </div>
+
+
+        <div class="plugin-grid">
+
+
+            {% assign project_plugins =
+                site.plugins
+                | where: "project", page.title
+            %}
+
+
+            {% for plugin in project_plugins %}
+
+
+            <a
+                href="{{ plugin.url | relative_url }}"
+                class="plugin-card"
+            >
+
+                <h2>
+                    {{ plugin.title }}
+                </h2>
+
+
+                <p>
+                    {{ plugin.description }}
+                </p>
+
+            </a>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+        {% if project_plugins.size == 0 %}
+
+        <div class="plugin-card">
+
+            <h2>
+                No plugins yet
+            </h2>
+
+
+            <p>
+                Add a plugin to the
+                <code>_plugins</code>
+                folder to make it appear here.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+
+</main>
+
+
+</body>
+
+</html>

@@ -248,14 +248,89 @@
 
 
     /* =====================================================
-       PAGE SCROLLING
+       SECTION SCROLL NAVIGATION
     ===================================================== */
 
     /*
-     * Intentionally do not intercept wheel events here.
-     * The browser owns page scrolling so users can scroll as
-     * quickly or as slowly as they want without a cooldown,
-     * preventDefault(), or forced section jumps.
+     * The home page is made of full-screen sections. A wheel/trackpad
+     * movement moves exactly one section in that direction. There is
+     * intentionally NO cooldown and NO animation lock: another wheel
+     * event can immediately request the next section while the current
+     * smooth animation is still running.
      */
+    const sectionList = Array.from(
+        document.querySelectorAll("main#site-root > section[id]")
+    );
+
+    if (sectionList.length > 0) {
+        let targetSection = 0;
+
+        function getClosestSection() {
+            const scrollPosition = window.scrollY + 80;
+            let closest = 0;
+            let distance = Infinity;
+
+            sectionList.forEach(function (section, index) {
+                const currentDistance = Math.abs(section.offsetTop - scrollPosition);
+                if (currentDistance < distance) {
+                    distance = currentDistance;
+                    closest = index;
+                }
+            });
+
+            return closest;
+        }
+
+        targetSection = getClosestSection();
+
+        /* Keep the virtual target in sync when the user uses an
+           anchor, scrollbar, keyboard, or another non-wheel method. */
+        document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+            link.addEventListener("click", function () {
+                const id = link.getAttribute("href").slice(1);
+                const index = sectionList.findIndex(function (section) {
+                    return section.id === id;
+                });
+
+                if (index !== -1) {
+                    targetSection = index;
+                }
+            });
+        });
+
+        let syncTimer = null;
+        window.addEventListener("scroll", function () {
+            clearTimeout(syncTimer);
+            syncTimer = setTimeout(function () {
+                targetSection = getClosestSection();
+            }, 120);
+        }, { passive: true });
+
+        window.addEventListener("wheel", function (event) {
+            if (Math.abs(event.deltaY) < 1) return;
+
+            /* Let horizontal gestures belong to the horizontal project
+               carousel/trackpad instead of changing page sections. */
+            if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+
+            const direction = event.deltaY > 0 ? 1 : -1;
+            const nextSection = Math.max(
+                0,
+                Math.min(sectionList.length - 1, targetSection + direction)
+            );
+
+            if (nextSection === targetSection) return;
+
+            /* This event is the section-navigation gesture itself.
+               We do not wait for an animation or start a cooldown. */
+            event.preventDefault();
+            targetSection = nextSection;
+
+            sectionList[targetSection].scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }, { passive: false });
+    }
 
 })();

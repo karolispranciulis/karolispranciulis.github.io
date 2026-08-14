@@ -522,19 +522,15 @@
 
             <div class="file-list" id="file-list">
 
-                {% assign plugin_folder = page.files_folder | remove_first: "/" | append: "/" %}
+                {% assign generated_files = site.data.plugin_files[page.title] %}
+                {% assign source_root = page.files_folder | remove_first: "/" | append: "/" %}
 
-                {% assign plugin_files = site.static_files
-                    | where_exp: "file", "file.path contains plugin_folder"
-                    | sort: "path"
-                %}
-
-                {% for file in plugin_files %}
-                    {% assign normalized_file_path = file.path | remove_first: "/" %}
-                    {% assign display_path = normalized_file_path | remove_first: plugin_folder %}
+                {% for file_path in generated_files %}
+                    {% assign normalized_path = file_path | remove_first: "/" %}
+                    {% assign display_path = normalized_path | remove_first: source_root %}
                     <div
                         class="file-manifest-item"
-                        data-file-url="{{ file.path | relative_url }}"
+                        data-file-url="{{ normalized_path | relative_url }}"
                         data-file-path="{{ display_path | escape }}"
                     ></div>
                 {% endfor %}

@@ -251,11 +251,67 @@
        PAGE SCROLLING
     ===================================================== */
 
+    /* =====================================================
+       SECTION WHEEL NAVIGATION
+    ===================================================== */
+
     /*
-     * Intentionally do not intercept wheel events here.
-     * The browser owns page scrolling so users can scroll as
-     * quickly or as slowly as they want without a cooldown,
-     * preventDefault(), or forced section jumps.
+     * One wheel event = one section step. There is deliberately
+     * NO cooldown and NO animation lock. If the user keeps
+     * scrolling, each wheel event can advance another section.
+     * This makes a small scroll move to the adjacent section
+     * while still allowing fast scrolling to move through several.
      */
+    const sections = Array.from(document.querySelectorAll("main > section[id]"));
+    let wheelIndex = 0;
+
+    function nearestSectionIndex() {
+        if (!sections.length) return 0;
+
+        const top = window.scrollY + 4;
+        let best = 0;
+        let bestDistance = Infinity;
+
+        sections.forEach(function (section, index) {
+            const distance = Math.abs(section.offsetTop - top);
+            if (distance < bestDistance) {
+                bestDistance = distance;
+                best = index;
+            }
+        });
+
+        return best;
+    }
+
+    if (sections.length) {
+        wheelIndex = nearestSectionIndex();
+
+        window.addEventListener("scroll", function () {
+            wheelIndex = nearestSectionIndex();
+        }, { passive: true });
+
+        window.addEventListener("wheel", function (event) {
+            if (Math.abs(event.deltaY) < 0.5) return;
+
+            /* Do not hijack horizontal scrolling. */
+            if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+
+            const direction = event.deltaY > 0 ? 1 : -1;
+            const nextIndex = Math.max(0, Math.min(
+                sections.length - 1,
+                wheelIndex + direction
+            ));
+
+            if (nextIndex === wheelIndex) return;
+
+            event.preventDefault();
+            wheelIndex = nextIndex;
+
+            sections[wheelIndex].scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }, { passive: false });
+    }
 
 })();

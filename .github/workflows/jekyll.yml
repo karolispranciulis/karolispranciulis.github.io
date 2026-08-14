@@ -27,6 +27,28 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
 
+      - name: Generate plugin file manifest
+        shell: bash
+        run: |
+          mkdir -p _data
+          python3 - <<'PY'
+          from pathlib import Path
+
+          root = Path("plugins")
+          lines = []
+
+          for plugin_dir in sorted(p for p in root.iterdir() if p.is_dir()):
+              files_dir = plugin_dir / "files"
+              if not files_dir.is_dir():
+                  continue
+
+              lines.append(f"{plugin_dir.name}:")
+              for file in sorted(p for p in files_dir.rglob("*") if p.is_file()):
+                  lines.append(f"  - {file.as_posix()}")
+
+          Path("_data/plugin_files.yml").write_text("\n".join(lines) + "\n", encoding="utf-8")
+          PY
+
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:

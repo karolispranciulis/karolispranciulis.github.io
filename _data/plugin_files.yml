@@ -1,5 +1,0 @@
-MsgPlugin:
-  - path: 'MessageCommand.kt'
-    url: '/plugins/MsgPlugin/files/MessageCommand.kt'
-  - path: 'TestPlugin.kt'
-    url: '/plugins/MsgPlugin/files/TestPlugin.kt'

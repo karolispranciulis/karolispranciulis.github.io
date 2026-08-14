@@ -6,6 +6,5 @@ description: >
 
 project: Minecraft Plugin Development (Kotlin)
 
-files_folder: plugins/MsgPlugin/files/
-
+github: https://github.com/karolispranciulis/Minecraft-message-plugin-kotlin-
 ---

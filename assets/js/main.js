@@ -68,6 +68,16 @@ if (sections.length > 1) {
         }
     }
 
+   const scrollableElement = event.target.closest(
+    [
+        ".editor-content",
+        ".ide-explorer",
+        "textarea",
+        "input",
+        "select",
+        "[data-native-scroll]"
+    ].join(",")
+);
     function animateToSection(index) {
         index = clampIndex(index);
         targetIndex = index;

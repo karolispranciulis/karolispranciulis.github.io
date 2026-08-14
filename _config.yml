@@ -16,8 +16,7 @@ collections:
     permalink: /projects/:name/
 
   plugins:
-    output: true
-    permalink: /plugins/:name/
+    output: false
 
 
 defaults:

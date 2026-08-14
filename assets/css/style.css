@@ -711,19 +711,19 @@ a {
 
 .plugin-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0,1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
 }
 
 .plugin-card {
-    min-height: 180px;
-    padding: 32px; /* Increased padding to fill space gracefully */
+    min-height: auto; /* Let content dictate height instead of locking it */
+    padding: 32px;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centers content vertically to eliminate empty gaps */
+    justify-content: flex-start;
     border: 1px solid var(--border);
     border-radius: 16px;
-    background: rgba(12,27,43,.75);
+    background: rgba(12, 27, 43, .75);
     transition: transform .2s ease, border-color .2s ease;
 }
 
@@ -734,15 +734,16 @@ a {
 
 .plugin-card h2 {
     margin: 0 0 12px;
-    font-size: clamp(1.4rem, 2.2vw, 1.85rem); /* Made title significantly larger */
-    line-height: 1.2;
-    white-space: nowrap;
+    font-size: 1.8rem; /* Forces a large, fixed size without clamps holding it back */
+    line-height: 1.25;
+    white-space: normal !important; /* Removes the single-line limiter */
+    word-break: break-word;
 }
 
 .plugin-card p {
     margin: 0;
-    color: var(--muted-light); /* Slightly brighter for better contrast */
-    font-size: 1.1rem; /* Increased description text size */
+    color: var(--muted-light);
+    font-size: 1.15srem; /* Larger description text */
     line-height: 1.6;
 }
 

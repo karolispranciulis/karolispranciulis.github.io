@@ -15,7 +15,7 @@ if (sections.length > 1) {
      * stops moving. Setting this slightly higher than your animation 
      * duration prevents that lingering momentum from chaining jumps.
      */
-    const WHEEL_COOLDOWN = 600;
+    const WHEEL_COOLDOWN = 525;
     const ANIMATION_DURATION = 520;
 
     let targetIndex = 0; // Tracks the definitive destination

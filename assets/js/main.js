@@ -10,17 +10,17 @@ if (sections.length > 1) {
     const nav = document.querySelector(".navbar");
 
     /*
-     * A cooldown is necessary because trackpads and free-spinning mice
-     * continue to fire wheel events for up to 1-2 seconds after the user 
-     * stops moving. Setting this slightly higher than your animation 
-     * duration prevents that lingering momentum from chaining jumps.
+     * MOMENTUM_TIMEOUT: The gap (in ms) required between wheel events
+     * to consider it a "new" gesture. 60-100ms is the sweet spot.
      */
-    const WHEEL_COOLDOWN = 525;
-    const ANIMATION_DURATION = 520;
+    const MOMENTUM_TIMEOUT = 60;
+    const ANIMATION_DURATION = 520; 
 
-    let targetIndex = 0; // Tracks the definitive destination
-    let lastScrollTime = 0;
+    let targetIndex = 0; 
     let animationFrame = null;
+    
+    let wheelLocked = false;
+    let momentumTimer = null;
 
     function getNavHeight() {
         return nav ? nav.getBoundingClientRect().height : 0;
@@ -126,24 +126,26 @@ if (sections.length > 1) {
 
         event.preventDefault();
 
-        const now = Date.now();
+        // 1. Clear the timer every time the hardware fires a wheel event
+        clearTimeout(momentumTimer);
 
-        // -------------------------------------------------
-        // COOLDOWN ENFORCEMENT
-        // -------------------------------------------------
-        // Block new scroll actions until the cooldown finishes.
-        if (now - lastScrollTime < WHEEL_COOLDOWN) {
+        // 2. Set a timer to unlock scrolling once events pause for 60ms
+        momentumTimer = setTimeout(function () {
+            wheelLocked = false;
+        }, MOMENTUM_TIMEOUT);
+
+        // 3. If we are currently locked (still processing a single gesture), ignore
+        if (wheelLocked) {
             return; 
         }
 
+        // 4. This is a new gesture! Lock it and calculate the next section
+        wheelLocked = true;
+
         const direction = event.deltaY > 0 ? 1 : -1;
-        
-        // Calculate next section based on the definitive target, 
-        // preventing mid-animation jumps.
         const nextIndex = clampIndex(targetIndex + direction);
 
         if (nextIndex !== targetIndex) {
-            lastScrollTime = now;
             animateToSection(nextIndex);
         }
     }
@@ -164,8 +166,9 @@ if (sections.length > 1) {
 
             event.preventDefault();
             
-            // Reset cooldown so wheels don't block button clicks
-            lastScrollTime = Date.now(); 
+            // Reset locks
+            clearTimeout(momentumTimer);
+            wheelLocked = false;
 
             animateToSection(index);
             history.replaceState(null, "", "#" + id);
@@ -200,21 +203,24 @@ if (sections.length > 1) {
 
         if (direction !== 0) {
             event.preventDefault();
-            lastScrollTime = Date.now();
+            clearTimeout(momentumTimer);
+            wheelLocked = false;
             animateToSection(targetIndex + direction);
             return;
         }
 
         if (event.key === "Home") {
             event.preventDefault();
-            lastScrollTime = Date.now();
+            clearTimeout(momentumTimer);
+            wheelLocked = false;
             animateToSection(0);
             return;
         }
 
         if (event.key === "End") {
             event.preventDefault();
-            lastScrollTime = Date.now();
+            clearTimeout(momentumTimer);
+            wheelLocked = false;
             animateToSection(sections.length - 1);
         }
     });

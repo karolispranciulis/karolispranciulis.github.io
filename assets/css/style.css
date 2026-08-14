@@ -709,36 +709,42 @@ a {
     line-height: 1.7;
 }
 
-/* Force the grid and cards to take more space */
+
 .plugin-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 20px !important;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 18px;
 }
 
 .plugin-card {
-    min-height: auto !important; /* Removes the 150px height lock */
-    height: auto !important;
-    padding: 40px !important;    /* More breathing room */
-    display: flex !important;
-    flex-direction: column !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 16px !important;
-    background: rgba(12, 27, 43, .75) !important;
+    min-height: 150px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: rgba(12,27,43,.75);
+    transition: transform .2s ease, border-color .2s ease;
+}
+
+.plugin-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--border-hover);
 }
 
 .plugin-card h2 {
-    margin: 0 0 15px 0 !important;
-    font-size: 2rem !important;   /* Force larger text */
-    line-height: 1.2 !important;
-    white-space: normal !important; /* Force text to wrap */
+    margin: 0 0 9px;
+    font-size: clamp(1.15rem, 1.7vw, 1.45rem);
+    line-height: 1.2;
+    white-space: nowrap;
 }
 
 .plugin-card p {
-    margin: 0 !important;
-    color: var(--muted-light) !important;
-    font-size: 1.25rem !important; /* Force larger description */
-    line-height: 1.6 !important;
+    margin: 0;
+    color: var(--muted);
+    font-size: .92rem;
+    line-height: 1.55;
 }
 
 .plugin-tags {

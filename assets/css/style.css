@@ -712,16 +712,16 @@ a {
 .plugin-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: 18px;
+    gap: 20px;
 }
 
 .plugin-card {
-    min-height: auto; /* Removed forced tall height */
-    padding: 18px 20px; /* Reduced vertical & horizontal padding */
+    min-height: 180px;
+    padding: 32px; /* Increased padding to fill space gracefully */
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    border: 1.5px solid var(--border);
+    justify-content: center; /* Centers content vertically to eliminate empty gaps */
+    border: 1px solid var(--border);
     border-radius: 16px;
     background: rgba(12,27,43,.75);
     transition: transform .2s ease, border-color .2s ease;
@@ -733,17 +733,17 @@ a {
 }
 
 .plugin-card h2 {
-    margin: 0 0 6px;
-    font-size: clamp(1.3rem, 2vw, 1.65rem); /* Enlarged heading */
+    margin: 0 0 12px;
+    font-size: clamp(1.4rem, 2.2vw, 1.85rem); /* Made title significantly larger */
     line-height: 1.2;
     white-space: nowrap;
 }
 
 .plugin-card p {
     margin: 0;
-    color: var(--muted);
-    font-size: 1.05rem; /* Enlarged description */
-    line-height: 1.45;
+    color: var(--muted-light); /* Slightly brighter for better contrast */
+    font-size: 1.1rem; /* Increased description text size */
+    line-height: 1.6;
 }
 
 .plugin-tags {
